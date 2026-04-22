@@ -8,6 +8,15 @@ public class Operacion extends Usuario{
 	private LocalDate fecha;
 	private String descripcion;
 	
+	public Operacion(int id, String nombre, String password, int id2, String tipo, LocalDate fecha,
+			String descripcion) {
+		super(id, nombre, password);
+		id = id2;
+		this.tipo = tipo;
+		this.fecha = fecha;
+		this.descripcion = descripcion;
+	}
+
 	public int getId() {
 		return id;
 	}

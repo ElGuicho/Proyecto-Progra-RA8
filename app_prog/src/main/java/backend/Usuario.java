@@ -4,6 +4,13 @@ public class Usuario {
     private int id;
 	private String nombre;
 	private String passwordHash;
+	
+	public Usuario(int id, String nombre, String password) {
+		this.id = id;
+		this.nombre = nombre;
+		this.passwordHash = password;
+		this.passwordHash = Integer.toString(hashCode());
+	}
 
 	public boolean verificarPassword(){
 		return true;
