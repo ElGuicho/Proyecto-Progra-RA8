@@ -147,7 +147,7 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 			}
 			else if (pwd.hasFocus())
 			{
-				pwd.setText(user.getText().replace("\n", ""));
+				pwd.setText(pwd.getText().replace("\n", ""));
 				if (comprobar())
 				{
 					this.dispose();

@@ -2,6 +2,8 @@ package frontend;
 
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
@@ -15,7 +17,7 @@ import javax.swing.JTextArea;
 
 import CRUD.DB_querys;
 
-public class NewUser extends JFrame implements MouseListener
+public class NewUser extends JFrame implements MouseListener, KeyListener
 {
 	public static NewUser nu;
 
@@ -35,6 +37,8 @@ public class NewUser extends JFrame implements MouseListener
 
 		register.addMouseListener(this);
 		cancel.addMouseListener(this);
+		user.addKeyListener(this);
+		pwd.addKeyListener(this);
 
 		basePanel.setLayout(new GridLayout(3, 2));
 		basePanel.add(userText);
@@ -74,6 +78,28 @@ public class NewUser extends JFrame implements MouseListener
 		}
 	}
 
+	public boolean verifyPwd(String passwd) {
+		String lower = "abcdefghijklmnñopqrstuvwxyz";
+		String upper = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+		String nums = "0123456789";
+		String spChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+
+		//Change this
+		if (passwd.length() < 12)
+			JOptionPane.showMessageDialog(null, "La contraseña debe de tener 12 o más carácteres");
+		else if (!passwd.contains(lower))
+			JOptionPane.showMessageDialog(null, "La contraseña debe de tener minúsculas");
+		else if (!passwd.contains(upper))
+			JOptionPane.showMessageDialog(null, "La contraseña debe de tener mayúsculas");
+		else if (!passwd.contains(nums))
+			JOptionPane.showMessageDialog(null, "La contraseña debe de tener números");
+		else if (!passwd.contains(spChars))
+			JOptionPane.showMessageDialog(null, "La contraseña debe de tener carácteres especiales (!, #, $, %, &, etc.)");
+		else
+			return true;
+		return false;
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
@@ -82,14 +108,19 @@ public class NewUser extends JFrame implements MouseListener
 			if (comprobar())
 			{
 				JOptionPane.showMessageDialog(null, "Nombre de usuario ya registrado");
+				pwd.grabFocus();
 			}
 			else
 			{
-				DB_querys.createUser(user.getText(), pwd.getText());
-				this.dispose();
-				UserPwd.up = new UserPwd();
+				if (verifyPwd(pwd.getText()))
+				{
+					DB_querys.createUser(user.getText(), pwd.getText());
+					this.dispose();
+					UserPwd.up = new UserPwd();
+				}
+				else
+					pwd.grabFocus();
 			}
-
 		}
 		
 		if (((JButton)e.getSource()).getText().equals("Cancelar"))
@@ -113,6 +144,48 @@ public class NewUser extends JFrame implements MouseListener
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		if ((e.getKeyChar() == '\n'))
+		{
+			if (user.hasFocus())
+			{
+				user.setText(user.getText().replace("\n", ""));
+				pwd.grabFocus();
+			}
+			else if (pwd.hasFocus())
+			{
+				pwd.setText(pwd.getText().replace("\n", ""));
+				if (comprobar())
+				{
+					pwd.grabFocus();
+					JOptionPane.showMessageDialog(null, "Nombre de usuario ya registrado");
+				}
+				else
+				{
+					if (verifyPwd(pwd.getText()))
+					{
+						DB_querys.createUser(user.getText(), pwd.getText());
+						this.dispose();
+						UserPwd.up = new UserPwd();
+					}
+					else
+						pwd.grabFocus();
+				}
+			}
+		}
+		if (user.getText().length() >= 50 || pwd.getText().length() >= 50)
+			e.consume();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 
 }

@@ -5,11 +5,10 @@ public class Usuario {
 	private String nombre;
 	private String passwordHash;
 	
-	public Usuario(int id, String nombre, String password) {
+	public Usuario(int id, String nombre, String passwordHash) {
 		this.id = id;
 		this.nombre = nombre;
-		this.passwordHash = password;
-		this.passwordHash = Integer.toString(hashCode());
+		this.passwordHash = passwordHash;
 	}
 
 	public boolean verificarPassword(){
