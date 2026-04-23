@@ -79,21 +79,20 @@ public class NewUser extends JFrame implements MouseListener, KeyListener
 	}
 
 	public boolean verifyPwd(String passwd) {
-		String lower = "abcdefghijklmnñopqrstuvwxyz";
-		String upper = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-		String nums = "0123456789";
-		String spChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+		boolean spChars = passwd.matches(".*[!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~].*");
+		boolean lower = passwd.matches(".*[a-z].*");
+		boolean upper = passwd.matches(".*[A-Z].*");
+		boolean nums = passwd.matches(".*[0-9].*");
 
-		//Change this
 		if (passwd.length() < 12)
 			JOptionPane.showMessageDialog(null, "La contraseña debe de tener 12 o más carácteres");
-		else if (!passwd.contains(lower))
+		else if (!lower)
 			JOptionPane.showMessageDialog(null, "La contraseña debe de tener minúsculas");
-		else if (!passwd.contains(upper))
+		else if (!upper)
 			JOptionPane.showMessageDialog(null, "La contraseña debe de tener mayúsculas");
-		else if (!passwd.contains(nums))
+		else if (!nums)
 			JOptionPane.showMessageDialog(null, "La contraseña debe de tener números");
-		else if (!passwd.contains(spChars))
+		else if (!spChars)
 			JOptionPane.showMessageDialog(null, "La contraseña debe de tener carácteres especiales (!, #, $, %, &, etc.)");
 		else
 			return true;
