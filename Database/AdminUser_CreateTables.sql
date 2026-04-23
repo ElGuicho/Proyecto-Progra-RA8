@@ -63,5 +63,3 @@ CREATE TABLE IF NOT EXISTS PREGUNTA_DESARROLLO (
 	respuesta_modelo TEXT,
 	FOREIGN KEY (pregunta_id) REFERENCES PREGUNTA(id)
 );
-
-SHOW tables;

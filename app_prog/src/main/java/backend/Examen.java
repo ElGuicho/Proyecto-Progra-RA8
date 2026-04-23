@@ -9,11 +9,11 @@ public class Examen {
 	private List<Pregunta> preguntas;
 	
 	public void generarAleatorio(){
-			
+		
 	}
 
 	public void generarMixto(){
-
+		
 	}
 
 	public int getId() {
