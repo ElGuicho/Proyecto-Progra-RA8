@@ -98,7 +98,23 @@ public class Pregunta {
 	public void setPalabrasClave(List<String> palabrasClave) {
 		this.palabrasClave = palabrasClave;
 	}
+	public Pregunta(){
 
+	}
+	public Pregunta(int id, String autor, String curso, String grupo, String modulo, String ra, String tema,
+			String enunciado, LocalDate fechaCreacion, List<String> palabrasClave) {
+		this.id = id;
+		this.autor = autor;
+		this.curso = curso;
+		this.grupo = grupo;
+		this.modulo = modulo;
+		this.ra = ra;
+		this.tema = tema;
+		this.enunciado = enunciado;
+		this.fechaCreacion = fechaCreacion;
+		this.palabrasClave = palabrasClave;
+	}
+	
 	@Override
 	public String toString() {
 		return "Pregunta [id=" + id + ", autor=" + autor + ", curso=" + curso + ", grupo=" + grupo + ", modulo="
