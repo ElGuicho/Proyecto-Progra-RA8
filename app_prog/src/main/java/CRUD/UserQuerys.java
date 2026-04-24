@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DB_querys {
+public class UserQuerys {
 	private static String db_url = "jdbc:mariadb://localhost:3306/examquest_db";
 	private static String db_user = "root";
 	private static String db_pwd = "Admin1234";
