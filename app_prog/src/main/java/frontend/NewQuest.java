@@ -4,13 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ChooseQuest extends JFrame implements MouseListener {
+public class NewQuest extends JFrame implements MouseListener {
 
     JRadioButton test = new JRadioButton("Tipo Test");
     JRadioButton desarrollo = new JRadioButton("Desarrollo");
     JButton continuar = new JButton("Continuar");
 
-    public ChooseQuest() {
+    public NewQuest() {
 
         Container panel = this.getContentPane();
         this.setBounds(400, 100, 300, 200);

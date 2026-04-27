@@ -4,43 +4,46 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ChooseWind extends JFrame implements MouseListener {
+public class ChoiceWin extends JFrame implements MouseListener {
 
     JButton crear = new JButton("Crear");
     JButton modificar = new JButton("Modificar");
     JButton eliminar = new JButton("Eliminar");
-    JButton seleccionar = new JButton("Seleccionar");
+    JButton buscar = new JButton("Buscar pregunta");
+    JButton examen = new JButton("Crear examen");
 
-    public ChooseWind() {
+    public ChoiceWin() {
 
         Container panel = this.getContentPane();
         this.setBounds(400, 100, 300, 250);
-        panel.setLayout(new GridLayout(5, 1));
+        panel.setLayout(new GridLayout(6, 1));
 
         panel.add(new JLabel("GESTIÓN DE PREGUNTAS"));
         panel.add(crear);
         panel.add(modificar);
         panel.add(eliminar);
-        panel.add(seleccionar);
+        panel.add(buscar);
+        panel.add(examen);
 
         crear.addMouseListener(this);
         modificar.addMouseListener(this);
         eliminar.addMouseListener(this);
-        seleccionar.addMouseListener(this);
+        examen.addMouseListener(this);
+        buscar.addMouseListener(this);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
 
     public static void main(String[] args) {
-        new ChooseWind();
+        new ChoiceWin();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
         if (e.getSource() == crear) {
-            new ChooseQuest();
+            new NewQuest();
             this.dispose();
         }
 
@@ -54,8 +57,13 @@ public class ChooseWind extends JFrame implements MouseListener {
             this.dispose();
         }
 
-        if (e.getSource() == seleccionar) {
-            new ChooseQuest();
+        if (e.getSource() == buscar) {
+            new SearchQuest();
+            this.dispose();
+        }
+
+        if (e.getSource() == examen) {
+            new CreateExam();
             this.dispose();
         }
     }

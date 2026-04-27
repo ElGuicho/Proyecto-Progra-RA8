@@ -37,12 +37,12 @@ public class AddText extends JFrame implements MouseListener {
 
         if (e.getSource() == guardar) {
             JOptionPane.showMessageDialog(null, "Pregunta DESARROLLO creada");
-            new ChooseWind();
+            new ChoiceWin();
             this.dispose();
         }
 
         if (e.getSource() == volver) {
-            new ChooseQuest();
+            new NewQuest();
             this.dispose();
         }
     }

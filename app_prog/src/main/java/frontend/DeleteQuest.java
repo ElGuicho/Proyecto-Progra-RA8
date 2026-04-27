@@ -34,12 +34,12 @@ public class DeleteQuest extends JFrame implements MouseListener {
 
         if (e.getSource() == eliminar) {
             JOptionPane.showMessageDialog(null, "Pregunta eliminada");
-            new ChooseWind();
+            new ChoiceWin();
             this.dispose();
         }
 
         if (e.getSource() == volver) {
-            new ChooseWind();
+            new ChoiceWin();
             this.dispose();
         }
     }

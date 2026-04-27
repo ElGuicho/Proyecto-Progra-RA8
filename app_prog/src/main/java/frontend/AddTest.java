@@ -46,12 +46,12 @@ public class AddTest extends JFrame implements MouseListener {
 
         if (e.getSource() == guardar) {
             JOptionPane.showMessageDialog(null, "Pregunta TEST creada");
-            new ChooseWind();
+            new ChoiceWin();
             this.dispose();
         }
 
         if (e.getSource() == volver) {
-            new ChooseQuest();
+            new NewQuest();
             this.dispose();
         }
     }

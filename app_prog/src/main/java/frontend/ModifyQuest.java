@@ -37,12 +37,12 @@ public class ModifyQuest extends JFrame implements MouseListener {
 
         if (e.getSource() == modificar) {
             JOptionPane.showMessageDialog(null, "Pregunta modificada");
-            new ChooseWind();
+            new ChoiceWin();
             this.dispose();
         }
 
         if (e.getSource() == volver) {
-            new ChooseWind();
+            new ChoiceWin();
             this.dispose();
         }
     }

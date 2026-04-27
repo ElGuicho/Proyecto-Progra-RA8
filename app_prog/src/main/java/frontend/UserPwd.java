@@ -95,16 +95,7 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 			if (comprobar())
 			{
 				this.dispose();
-				Container basePanel = this.getContentPane();
-
-				this.setBounds(400 , 60, 300, 300);
-				basePanel.removeAll();
-				basePanel.setLayout(new FlowLayout());
-				basePanel.add(entrada);
-				basePanel.setVisible(true);
-
-				this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				this.setVisible(true);
+				new ChoiceWin();
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Datos incorrectos");
