@@ -21,14 +21,12 @@ public class UserQuerys {
 		}
 	}
 
-	public static boolean createUser(String user, String pwd) {
+	public static void createUser(String user, String pwd) {
 		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
 			stmt.executeUpdate("INSERT INTO usuario (nombre, password_hash) VALUES ('" + user + "', '"
 					+ Integer.toString(pwd.hashCode()) + "');");
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
 	}
 }

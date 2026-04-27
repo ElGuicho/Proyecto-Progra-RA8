@@ -31,7 +31,7 @@ public abstract class Pregunta {
 		this.fechaCreacion = fechaCreacion;
 		this.palabrasClave = palabrasClave;
 	}
-	
+
 	public boolean coincideFiltro(){
 		return true;
 	}

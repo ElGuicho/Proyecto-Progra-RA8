@@ -1,7 +1,6 @@
 package frontend;
 
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -28,10 +27,9 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 	JLabel pwdText = new JLabel("Contraseña:");
 	JTextArea user = new JTextArea();
 	JTextArea pwd = new JTextArea();
-	JButton confirm = new JButton("Aceptar");
+	JButton confirm = new JButton("Iniciar sesion");
 	JButton cancel = new JButton("Cancelar");
-	JButton register = new JButton("Aun no registrado");
-	JLabel entrada = new JLabel("Bienvenidos a la aplicacion !!!");
+	JButton register = new JButton("Registrarse");
 
 	public UserPwd()
 	{
@@ -90,7 +88,7 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		if (((JButton)e.getSource()).getText().equals("Aceptar"))
+		if (((JButton)e.getSource()).getText().equals("Iniciar sesion"))
 		{
 			if (comprobar())
 			{
@@ -106,10 +104,10 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 			this.dispose();
 		}
 
-		if (((JButton)e.getSource()).getText().equals("Aun no registrado"))
+		if (((JButton)e.getSource()).getText().equals("Registrarse"))
 		{
 			this.dispose();
-			NewUser.nu = new NewUser();
+			new NewUser();
 		}
 	}
 
@@ -144,16 +142,7 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 				if (comprobar())
 				{
 					this.dispose();
-					Container basePanel = this.getContentPane();
-
-					this.setBounds(400 , 60, 300, 300);
-					basePanel.removeAll();
-					basePanel.setLayout(new FlowLayout());
-					basePanel.add(entrada);
-					basePanel.setVisible(true);
-
-					this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					this.setVisible(true);
+					new ChoiceWin();
 				}
 				else
 				{

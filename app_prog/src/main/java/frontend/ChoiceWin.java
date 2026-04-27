@@ -11,12 +11,13 @@ public class ChoiceWin extends JFrame implements MouseListener {
     JButton eliminar = new JButton("Eliminar");
     JButton buscar = new JButton("Buscar pregunta");
     JButton examen = new JButton("Crear examen");
+    JButton logOut = new JButton("Cerrar sesion");
 
     public ChoiceWin() {
 
         Container panel = this.getContentPane();
         this.setBounds(400, 100, 300, 250);
-        panel.setLayout(new GridLayout(6, 1));
+        panel.setLayout(new GridLayout(7, 1));
 
         panel.add(new JLabel("GESTIÓN DE PREGUNTAS"));
         panel.add(crear);
@@ -24,12 +25,14 @@ public class ChoiceWin extends JFrame implements MouseListener {
         panel.add(eliminar);
         panel.add(buscar);
         panel.add(examen);
+        panel.add(logOut);
 
         crear.addMouseListener(this);
         modificar.addMouseListener(this);
         eliminar.addMouseListener(this);
         examen.addMouseListener(this);
         buscar.addMouseListener(this);
+        logOut.addMouseListener(this);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -64,6 +67,11 @@ public class ChoiceWin extends JFrame implements MouseListener {
 
         if (e.getSource() == examen) {
             new CreateExam();
+            this.dispose();
+        }
+
+        if (e.getSource() == logOut) {
+            new UserPwd();
             this.dispose();
         }
     }
