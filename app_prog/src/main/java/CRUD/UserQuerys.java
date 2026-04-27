@@ -1,45 +1,34 @@
 package CRUD;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class UserQuerys {
+	private static String db_url = "jdbc:mariadb://localhost:3306/examquest_db";
+	private static String db_user = "root";
+	private static String db_pwd = "Admin1234";
 
-    private static final String SQL_FIND_BY_NAME =
-            "SELECT id, nombre, password_hash FROM usuario WHERE nombre = ?";
+	public static ResultSet getUserPwd() {
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
+			ResultSet rs = stmt.executeQuery("SELECT id, nombre, password_hash FROM usuario");
+			return rs;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
-    private static final String SQL_INSERT =
-            "INSERT INTO usuario (nombre, password_hash) VALUES (?, ?)";
-
-    // Obtener usuario por nombre
-    public static ResultSet getUserPwd(String nombre) {
-        try {
-            Connection conn = ConnectionDB.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_NAME);
-            stmt.setString(1, nombre);
-            return stmt.executeQuery(); // NO cierres la conexión aquí
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    // Crear usuario con contraseña hasheada
-    public static boolean createUser(String user, String pwdHash) {
-        try (Connection conn = ConnectionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT)) {
-
-            stmt.setString(1, user);
-            stmt.setString(2, pwdHash);
-            stmt.executeUpdate();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+	public static boolean createUser(String user, String pwd) {
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate("INSERT INTO usuario (nombre, password_hash) VALUES ('" + user + "', '"
+					+ Integer.toString(pwd.hashCode()) + "');");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

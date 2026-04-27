@@ -1,77 +1,64 @@
 package backend;
 
-import com.mycompany.proyecto.utils.HashUtil;
+import java.sql.ResultSet;
 
-/**
- * Clase que representa a un usuario del sistema.
- * 
- * Contiene la información necesaria para la autenticación:
- * - id del usuario
- * - nombre de usuario
- * - contraseña almacenada como hash SHA-256
- */
 public class Usuario {
-
     private int id;
-    private String nombre;
-    private String passwordHash;
+	private String nombre;
+	private String passwordHash;
+	
+	public Usuario(int id, String nombre, String passwordHash) {
+		this.id = id;
+		this.nombre = nombre;
+		this.passwordHash = Integer.toString(passwordHash.hashCode());
+	}
 
-    /**
-     * Constructor vacío necesario para los DAO.
-     */
-    public Usuario() {}
+	public boolean verificarPassword(ResultSet rs){
+		try {
+			while (rs.next())
+				if (rs.getString("nombre").equals(nombre) && rs.getString("password_hash").equals(passwordHash))
+					return true;
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-    /**
-     * Constructor completo.
-     */
-    public Usuario(int id, String nombre, String passwordHash) {
-        this.id = id;
-        this.nombre = nombre;
-        this.passwordHash = passwordHash;
-    }
+	public int getId() {
+		return id;
+	}
 
-    /**
-     * Verifica si la contraseña ingresada coincide con el hash almacenado.
-     *
-     * @param passwordTextoPlano contraseña ingresada por el usuario
-     * @return true si coincide, false si no
-     */
-    public boolean verificarPassword(String passwordTextoPlano) {
-        return HashUtil.verificar(passwordTextoPlano, this.passwordHash);
-    }
- 
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public String getNombre() {
+		return nombre;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public String getNombre() {
-        return nombre;
-    }
+	public String getPasswordHash() {
+		return passwordHash;
+	}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
+	}
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((passwordHash == null) ? 0 : passwordHash.hashCode());
+		return result;
+	}
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    // Métodos de utilidad
-    
-    @Override
-    public String toString() {
-        return "Usuario [id=" + id + ", nombre=" + nombre + "]";
-    }
-}
-id + ", nombre=" + nombre + ", passwordHash=" + passwordHash + "]";
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", passwordHash=" + passwordHash + "]";
 	}
 }
