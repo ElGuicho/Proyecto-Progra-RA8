@@ -58,23 +58,6 @@ public class Usuario {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Usuario other = (Usuario) obj;
-		if (passwordHash == null) {
-			if (other.passwordHash != null)
-				return false;
-		} else if (!passwordHash.equals(other.passwordHash))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", passwordHash=" + passwordHash + "]";
 	}
