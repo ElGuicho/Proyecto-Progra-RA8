@@ -12,11 +12,8 @@ public class UserQuerys {
 	private static String db_pwd = "Admin1234";
 
 	public static ResultSet getUserPwd() {
-		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd)) {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT nombre, password_hash FROM usuario");
-			stmt.close();
-			conn.close();
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
+			ResultSet rs = stmt.executeQuery("SELECT id, nombre, password_hash FROM usuario");
 			return rs;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -25,12 +22,9 @@ public class UserQuerys {
 	}
 
 	public static boolean createUser(String user, String pwd) {
-		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd)) {
-			Statement stmt = conn.createStatement();
-			stmt.executeQuery("INSERT INTO usuario (nombre, password_hash) VALUES ('" + user + "', '"
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate("INSERT INTO usuario (nombre, password_hash) VALUES ('" + user + "', '"
 					+ Integer.toString(pwd.hashCode()) + "');");
-			stmt.close();
-			conn.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();

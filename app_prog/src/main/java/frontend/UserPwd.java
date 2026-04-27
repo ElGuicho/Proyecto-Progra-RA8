@@ -16,7 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import CRUD.DB_querys;
+import CRUD.UserQuerys;
+import backend.Usuario;
 
 public class UserPwd extends JFrame implements MouseListener, KeyListener
 {
@@ -67,11 +68,12 @@ public class UserPwd extends JFrame implements MouseListener, KeyListener
 
 	public boolean comprobar()
 	{
-		ResultSet rs = DB_querys.getUserPwd();
+		ResultSet rs = UserQuerys.getUserPwd();
 		try {
+			Usuario u = new Usuario(rs.getInt("id"), user.getText(), pwd.getText());
 			while (rs.next())
 			{
-				if (rs.getString("nombre").equals(user.getText()) && rs.getString("password_hash").equals(Integer.toString(pwd.getText().hashCode())))
+				if (u.verificarPassword(rs))
 				{
 					rs.close();
 					return true;

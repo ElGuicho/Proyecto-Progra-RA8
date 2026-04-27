@@ -1,5 +1,7 @@
 package backend;
 
+import java.sql.ResultSet;
+
 public class Usuario {
     private int id;
 	private String nombre;
@@ -8,11 +10,19 @@ public class Usuario {
 	public Usuario(int id, String nombre, String passwordHash) {
 		this.id = id;
 		this.nombre = nombre;
-		this.passwordHash = passwordHash;
+		this.passwordHash = Integer.toString(passwordHash.hashCode());
 	}
 
-	public boolean verificarPassword(){
-		return true;
+	public boolean verificarPassword(ResultSet rs){
+		try {
+			while (rs.next())
+				if (rs.getString("nombre").equals(nombre) && rs.getString("password_hash").equals(passwordHash))
+					return true;
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public int getId() {

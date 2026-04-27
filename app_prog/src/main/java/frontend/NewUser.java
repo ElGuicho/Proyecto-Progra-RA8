@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import CRUD.DB_querys;
+import CRUD.UserQuerys;
 
 public class NewUser extends JFrame implements MouseListener, KeyListener
 {
@@ -60,7 +60,7 @@ public class NewUser extends JFrame implements MouseListener, KeyListener
 
 	public boolean comprobar()
 	{
-		ResultSet rs = DB_querys.getUserPwd();
+		ResultSet rs = UserQuerys.getUserPwd();
 		try {
 			while (rs.next())
 			{
@@ -113,7 +113,7 @@ public class NewUser extends JFrame implements MouseListener, KeyListener
 			{
 				if (verifyPwd(pwd.getText()))
 				{
-					DB_querys.createUser(user.getText(), pwd.getText());
+					UserQuerys.createUser(user.getText(), pwd.getText());
 					this.dispose();
 					UserPwd.up = new UserPwd();
 				}
@@ -166,7 +166,7 @@ public class NewUser extends JFrame implements MouseListener, KeyListener
 				{
 					if (verifyPwd(pwd.getText()))
 					{
-						DB_querys.createUser(user.getText(), pwd.getText());
+						UserQuerys.createUser(user.getText(), pwd.getText());
 						this.dispose();
 						UserPwd.up = new UserPwd();
 					}

@@ -3,7 +3,8 @@ package backend;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Pregunta {
+
+public abstract class Pregunta {
 	private int id;
 	private String autor;
 	private String curso;
@@ -14,7 +15,23 @@ public class Pregunta {
 	private String enunciado;
 	private LocalDate fechaCreacion;
 	private List<String> palabrasClave;
-
+	
+	public Pregunta(){}
+	
+	public Pregunta(int id, String autor, String curso, String grupo, String modulo, String ra, String tema,
+			String enunciado, LocalDate fechaCreacion, List<String> palabrasClave) {
+		this.id = id;
+		this.autor = autor;
+		this.curso = curso;
+		this.grupo = grupo;
+		this.modulo = modulo;
+		this.ra = ra;
+		this.tema = tema;
+		this.enunciado = enunciado;
+		this.fechaCreacion = fechaCreacion;
+		this.palabrasClave = palabrasClave;
+	}
+	
 	public boolean coincideFiltro(){
 		return true;
 	}
@@ -96,22 +113,6 @@ public class Pregunta {
 	}
 
 	public void setPalabrasClave(List<String> palabrasClave) {
-		this.palabrasClave = palabrasClave;
-	}
-	public Pregunta(){
-
-	}
-	public Pregunta(int id, String autor, String curso, String grupo, String modulo, String ra, String tema,
-			String enunciado, LocalDate fechaCreacion, List<String> palabrasClave) {
-		this.id = id;
-		this.autor = autor;
-		this.curso = curso;
-		this.grupo = grupo;
-		this.modulo = modulo;
-		this.ra = ra;
-		this.tema = tema;
-		this.enunciado = enunciado;
-		this.fechaCreacion = fechaCreacion;
 		this.palabrasClave = palabrasClave;
 	}
 	
