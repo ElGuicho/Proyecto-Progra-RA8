@@ -1,0 +1,64 @@
+package Model;
+
+import java.sql.ResultSet;
+
+public class Usuario {
+    private int id;
+	private String nombre;
+	private String passwordHash;
+	
+	public Usuario(int id, String nombre, String passwordHash) {
+		this.id = id;
+		this.nombre = nombre;
+		this.passwordHash = Integer.toString(passwordHash.hashCode());
+	}
+
+	public boolean verificarPassword(ResultSet rs){
+		try {
+			while (rs.next())
+				if (rs.getString("nombre").equals(nombre) && rs.getString("password_hash").equals(passwordHash))
+					return true;
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((passwordHash == null) ? 0 : passwordHash.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", passwordHash=" + passwordHash + "]";
+	}
+}
