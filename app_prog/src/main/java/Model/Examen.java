@@ -12,8 +12,8 @@ public class Examen {
 		
 	}
 
-	public void generarMixto(){
-		
+	public void generarMixto(List<Pregunta> chosen_quests){
+		//juntar chosen_quests con preguntas aleatorias
 	}
 
 	public int getId() {

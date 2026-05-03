@@ -119,6 +119,15 @@ public class QuestionQuerys {
 	public static ResultSet searchQuest(HashMap<String, String> filtros, boolean isTest) {
 		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
 			String query = "";
+
+			if (filtros.isEmpty()) {
+				if (isTest)
+					query = "SELECT * FROM pregunta p JOIN pregunta_test pt ON p.id = pt.pregunta_id;";
+				else
+					query = "SELECT * FROM pregunta p JOIN pregunta_desarrollo pd ON p.id = pd.pregunta_id;";
+				ResultSet rs = stmt.executeQuery(query);
+				return rs;
+			}
 			if (isTest) {
 				query = "SELECT * FROM pregunta p JOIN pregunta_test pt ON p.id = pt.pregunta_id WHERE ";
 				for (String key : filtros.keySet()) {
