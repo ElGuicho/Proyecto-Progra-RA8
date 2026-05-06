@@ -21,9 +21,10 @@ public class ModifyQuest extends JFrame {
     private JButton volver = new JButton("Volver");
 
     public ModifyQuest() {
-        UiUtils.setupFrame(this, "Modificar pregunta", 380, 240);
+        UiUtils.setupFrame(this, "Modificar pregunta", 460, 260);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Modificar pregunta"), UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("ID de la pregunta:"), UiUtils.gbc(0, 1, 1));
@@ -38,7 +39,8 @@ public class ModifyQuest extends JFrame {
         UiUtils.styleButton(modificar);
         UiUtils.styleButton(volver);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

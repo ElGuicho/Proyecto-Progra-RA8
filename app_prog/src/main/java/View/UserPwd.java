@@ -23,9 +23,10 @@ public class UserPwd extends JFrame {
 	private JButton register = new JButton("Registrarse");
 
 	public UserPwd() {
-		UiUtils.setupFrame(this, "Iniciar sesión", 380, 260);
+		UiUtils.setupFrame(this, "Iniciar sesion", 480, 320);
 
-		JPanel panel = UiUtils.createPanel();
+		JPanel outerPanel = UiUtils.createAppPanel();
+		JPanel panel = UiUtils.createCardPanel();
 		JLabel title = UiUtils.createTitle("Bienvenido a ExamQuest");
 		GridBagConstraints titleConstraints = UiUtils.gbc(0, 0, 2);
 		panel.add(title, titleConstraints);
@@ -37,6 +38,7 @@ public class UserPwd extends JFrame {
 		panel.add(passwordField, UiUtils.gbc(1, 2, 1));
 
 		JPanel buttons = new JPanel(new GridLayout(1, 3, 10, 0));
+		buttons.setOpaque(false);
 		buttons.add(cancel);
 		buttons.add(confirm);
 		buttons.add(register);
@@ -49,7 +51,8 @@ public class UserPwd extends JFrame {
 		buttonConstraints.fill = GridBagConstraints.NONE;
 		panel.add(buttons, buttonConstraints);
 
-		setContentPane(panel);
+		outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+		setContentPane(outerPanel);
 		getRootPane().setDefaultButton(confirm);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

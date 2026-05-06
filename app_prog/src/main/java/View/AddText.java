@@ -24,9 +24,10 @@ public class AddText extends JFrame {
     private JButton volver = new JButton("Volver");
 
     public AddText() {
-        UiUtils.setupFrame(this, "Nueva pregunta de desarrollo", 420, 380);
+        UiUtils.setupFrame(this, "Nueva pregunta de desarrollo", 520, 420);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Nueva pregunta de desarrollo"), UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("Enunciado:"), UiUtils.gbc(0, 1, 1));
@@ -40,8 +41,10 @@ public class AddText extends JFrame {
 
         UiUtils.styleButton(guardar);
         UiUtils.styleButton(volver);
+        UiUtils.styleTextArea(respuestaArea);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

@@ -30,24 +30,25 @@ public class AddTest extends JFrame {
     private JButton volver = new JButton("Volver");
 
     public AddTest() {
-        UiUtils.setupFrame(this, "Nueva pregunta tipo test", 460, 420);
+        UiUtils.setupFrame(this, "Nueva pregunta tipo test", 500, 460);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Nueva pregunta tipo TEST"), UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("Enunciado:"), UiUtils.gbc(0, 1, 1));
         panel.add(enunciadoField, UiUtils.gbc(1, 1, 1));
 
-        panel.add(new JLabel("Opci�n 1:"), UiUtils.gbc(0, 2, 1));
+        panel.add(new JLabel("Opcion 1:"), UiUtils.gbc(0, 2, 1));
         panel.add(option1Field, UiUtils.gbc(1, 2, 1));
 
-        panel.add(new JLabel("Opci�n 2:"), UiUtils.gbc(0, 3, 1));
+        panel.add(new JLabel("Opcion 2:"), UiUtils.gbc(0, 3, 1));
         panel.add(option2Field, UiUtils.gbc(1, 3, 1));
 
-        panel.add(new JLabel("Opci�n 3:"), UiUtils.gbc(0, 4, 1));
+        panel.add(new JLabel("Opcion 3:"), UiUtils.gbc(0, 4, 1));
         panel.add(option3Field, UiUtils.gbc(1, 4, 1));
 
-        panel.add(new JLabel("Opci�n 4:"), UiUtils.gbc(0, 5, 1));
+        panel.add(new JLabel("Opcion 4:"), UiUtils.gbc(0, 5, 1));
         panel.add(option4Field, UiUtils.gbc(1, 5, 1));
 
         panel.add(new JLabel("Respuesta correcta (0-3):"), UiUtils.gbc(0, 6, 1));
@@ -57,7 +58,9 @@ public class AddTest extends JFrame {
         panel.add(volver, UiUtils.gbc(1, 7, 1));
         UiUtils.styleButton(guardar);
         UiUtils.styleButton(volver);
-        setContentPane(panel);
+
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
