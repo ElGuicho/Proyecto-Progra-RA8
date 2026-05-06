@@ -1,165 +1,108 @@
 package View;
 
-import java.awt.Container;
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import CRUD.UserQuerys;
-import Model.Usuario;
 
-public class UserPwd extends JFrame implements MouseListener, KeyListener
-{
-	public static UserPwd up;
+public class UserPwd extends JFrame {
 
-	JLabel upPanel = new JLabel();
-	JLabel userText = new JLabel("Nombre de usuario:");
-	JLabel pwdText = new JLabel("Contraseña:");
-	JTextArea user = new JTextArea();
-	JTextArea pwd = new JTextArea();
-	JButton confirm = new JButton("Iniciar sesion");
-	JButton cancel = new JButton("Cancelar");
-	JButton register = new JButton("Registrarse");
+	private JTextField userField = new JTextField(18);
+	private JPasswordField passwordField = new JPasswordField(18);
+	private JButton confirm = new JButton("Iniciar sesion");
+	private JButton cancel = new JButton("Cancelar");
+	private JButton register = new JButton("Registrarse");
 
-	public UserPwd()
-	{
-		Container basePanel = this.getContentPane();
+	public UserPwd() {
+		UiUtils.setupFrame(this, "Iniciar sesión", 380, 260);
 
-		this.setBounds(400 , 60, 300, 300);
+		JPanel panel = UiUtils.createPanel();
+		JLabel title = UiUtils.createTitle("Bienvenido a ExamQuest");
+		GridBagConstraints titleConstraints = UiUtils.gbc(0, 0, 2);
+		panel.add(title, titleConstraints);
 
-		upPanel.setLayout(new GridLayout(3, 2));
-		upPanel.add(userText);
-		upPanel.add(user);
-		upPanel.add(pwdText);
-		upPanel.add(pwd);
-		upPanel.add(confirm);
-		upPanel.add(cancel);
-		user.addKeyListener(this);
-		pwd.addKeyListener(this);
-		confirm.addMouseListener(this);
-		cancel.addMouseListener(this);
-		upPanel.setVisible(true);
-		
-		basePanel.setLayout(new GridLayout(2, 1));
-		basePanel.add(upPanel);
-		basePanel.add(register);
-		register.addMouseListener(this);
-		basePanel.setVisible(true);
+		panel.add(new JLabel("Usuario:"), UiUtils.gbc(0, 1, 1));
+		panel.add(userField, UiUtils.gbc(1, 1, 1));
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setVisible(true);
+		panel.add(new JLabel("Contrasena:"), UiUtils.gbc(0, 2, 1));
+		panel.add(passwordField, UiUtils.gbc(1, 2, 1));
+
+		JPanel buttons = new JPanel(new GridLayout(1, 3, 10, 0));
+		buttons.add(cancel);
+		buttons.add(confirm);
+		buttons.add(register);
+
+		UiUtils.styleButton(cancel);
+		UiUtils.styleButton(confirm);
+		UiUtils.styleButton(register);
+
+		GridBagConstraints buttonConstraints = UiUtils.gbc(0, 3, 2);
+		buttonConstraints.fill = GridBagConstraints.NONE;
+		panel.add(buttons, buttonConstraints);
+
+		setContentPane(panel);
+		getRootPane().setDefaultButton(confirm);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		confirm.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				login();
+			}
+		});
+
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+
+		register.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new NewUser();
+			}
+		});
 	}
 
 	public static void main(String[] args) {
-		up = new UserPwd();
+		new UserPwd();
 	}
 
-	public boolean comprobar()
-	{
-		ResultSet rs = UserQuerys.getUserPwd();
-		try {
-			Usuario u = new Usuario(rs.getInt("id"), user.getText(), pwd.getText());
-			while (rs.next())
-			{
-				if (u.verificarPassword(rs))
-				{
-					rs.close();
-					return true;
-				}
-			}
-			rs.close();
-			return false;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+	private void login() {
+		String username = userField.getText().trim();
+		String password = new String(passwordField.getPassword());
 
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		if (((JButton)e.getSource()).getText().equals("Iniciar sesion"))
-		{
-			if (comprobar())
-			{
-				this.dispose();
-				new ChoiceWin();
-			}
-			else
-				JOptionPane.showMessageDialog(null, "Datos incorrectos");
-		}
-		
-		if (((JButton)e.getSource()).getText().equals("Cancelar"))
-		{
-			this.dispose();
+		if (username.isEmpty()) {
+			UiUtils.showError(this, "Ingrese su nombre de usuario.");
+			userField.requestFocusInWindow();
+			return;
 		}
 
-		if (((JButton)e.getSource()).getText().equals("Registrarse"))
-		{
-			this.dispose();
-			new NewUser();
+		if (password.isEmpty()) {
+			UiUtils.showError(this, "Ingrese su contrasena.");
+			passwordField.requestFocusInWindow();
+			return;
 		}
-	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if ((e.getKeyChar() == '\n'))
-		{
-			if (user.hasFocus())
-			{
-				user.setText(user.getText().replace("\n", ""));
-				pwd.grabFocus();
-			}
-			else if (pwd.hasFocus())
-			{
-				pwd.setText(pwd.getText().replace("\n", ""));
-				if (comprobar())
-				{
-					this.dispose();
-					new ChoiceWin();
-				}
-				else
-				{
-					user.grabFocus();
-					JOptionPane.showMessageDialog(null, "Datos incorrectos");
-				}
-			}
+		if (UserQuerys.authenticateUser(username, password)) {
+			dispose();
+			new ChoiceWin();
+		} else {
+			UiUtils.showError(this, "Usuario o contrasena incorrectos.");
+			userField.requestFocusInWindow();
 		}
-		if (user.getText().length() >= 50 || pwd.getText().length() >= 50)
-			e.consume();
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
 	}
 }
