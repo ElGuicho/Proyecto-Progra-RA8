@@ -1,55 +1,55 @@
 package View;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class NewQuest extends JFrame implements MouseListener {
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
-    JRadioButton test = new JRadioButton("Tipo Test");
-    JRadioButton desarrollo = new JRadioButton("Desarrollo");
-    JButton continuar = new JButton("Continuar");
+public class NewQuest extends JFrame {
+
+    private JRadioButton testOption = new JRadioButton("Pregunta tipo TEST");
+    private JRadioButton desarrolloOption = new JRadioButton("Pregunta tipo DESARROLLO");
+    private JButton continuar = new JButton("Continuar");
 
     public NewQuest() {
+        UiUtils.setupFrame(this, "Tipo de pregunta", 380, 240);
 
-        Container panel = this.getContentPane();
-        this.setBounds(400, 100, 300, 200);
-        panel.setLayout(new GridLayout(4, 1));
+        JPanel panel = UiUtils.createPanel();
+        panel.add(UiUtils.createTitle("Selecciona el tipo de pregunta"), UiUtils.gbc(0, 0, 2));
 
-        ButtonGroup grupo = new ButtonGroup();
-        grupo.add(test);
-        grupo.add(desarrollo);
+        ButtonGroup group = new ButtonGroup();
+        group.add(testOption);
+        group.add(desarrolloOption);
 
-        panel.add(new JLabel("CREAR PREGUNTA"));
-        panel.add(test);
-        panel.add(desarrollo);
-        panel.add(continuar);
+        panel.add(testOption, UiUtils.gbc(0, 1, 2));
+        panel.add(desarrolloOption, UiUtils.gbc(0, 2, 2));
+        panel.add(continuar, UiUtils.gbc(0, 3, 2));
 
-        continuar.addMouseListener(this);
+        UiUtils.styleButton(continuar);
 
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setVisible(true);
-    }
+        setContentPane(panel);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-        if (e.getSource() == continuar) {
-
-            if (test.isSelected()) {
-                new AddTest();
-                this.dispose();
-            } else if (desarrollo.isSelected()) {
-                new AddText();
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "Selecciona un tipo");
+        continuar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (testOption.isSelected()) {
+                    dispose();
+                    new AddTest();
+                } else if (desarrolloOption.isSelected()) {
+                    dispose();
+                    new AddText();
+                } else {
+                    UiUtils.showError(NewQuest.this, "Selecciona un tipo de pregunta.");
+                }
             }
-        }
+        });
     }
-
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
 }

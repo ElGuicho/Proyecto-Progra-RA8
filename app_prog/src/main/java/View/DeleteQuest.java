@@ -1,87 +1,77 @@
 package View;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import CRUD.QuestionQuerys;
-import CRUD.UserQuerys;
-import Model.Pregunta;
-import Model.PreguntaDesarrollo;
-import Model.PreguntaTest;
 
-public class DeleteQuest extends JFrame implements MouseListener {
+public class DeleteQuest extends JFrame {
 
-    JTextField id = new JTextField();
+    private JTextField idField = new JTextField(18);
+    private JButton eliminar = new JButton("Eliminar");
+    private JButton volver = new JButton("Volver");
 
-    JButton eliminar = new JButton("Eliminar");
-    JButton volver = new JButton("Volver");
-    JButton tipo = new JButton("Tipo de pregunta");
+    public DeleteQuest() {
+        UiUtils.setupFrame(this, "Eliminar pregunta", 380, 220);
 
-	public DeleteQuest() {
+        JPanel panel = UiUtils.createPanel();
+        panel.add(UiUtils.createTitle("Eliminar pregunta"), UiUtils.gbc(0, 0, 2));
 
-        Container panel = this.getContentPane();
-        this.setBounds(400, 100, 300, 150);
-        panel.setLayout(new GridLayout(5, 1));
+        panel.add(new JLabel("ID de la pregunta:"), UiUtils.gbc(0, 1, 1));
+        panel.add(idField, UiUtils.gbc(1, 1, 1));
 
-        panel.add(new JLabel("Filtros de búsqueda"));
-        panel.add(tipo); // Dos opciones: desarrollo o test
-        panel.add(id);
-        panel.add(eliminar);
-        panel.add(volver);
+        panel.add(eliminar, UiUtils.gbc(0, 2, 1));
+        panel.add(volver, UiUtils.gbc(1, 2, 1));
 
-        eliminar.addMouseListener(this);
-        volver.addMouseListener(this);
+        UiUtils.styleButton(eliminar);
+        UiUtils.styleButton(volver);
 
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setVisible(true);
+        setContentPane(panel);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        eliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteQuestion();
+            }
+        });
+
+        volver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new ChoiceWin();
+            }
+        });
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-		boolean isfalse = true;
-		int userId = UserQuerys.getUserId();
-		Pregunta delQuest;
+    private void deleteQuestion() {
+        String idText = idField.getText().trim();
 
-        if (e.getSource() == eliminar) {
-			if (id.getText().isEmpty()) {
-				if (isfalse) // Seleccion de tipo de pregunta
-					delQuest = new PreguntaTest(/*Atributos filtro*/);
-				else
-					delQuest =  new PreguntaDesarrollo(/*Atributos filtro*/);
-
-				if (delQuest.coincideFiltro()) {
-					if (userId == delQuest.getId()) {
-						QuestionQuerys.rmQuest(delQuest.getId());
-						JOptionPane.showMessageDialog(null, "Pregunta eliminada");
-						new ChoiceWin();
-						this.dispose();
-					} else {
-						JOptionPane.showMessageDialog(null, "No eres el autor de la pregunta");
-					}
-				} else {
-					JOptionPane.showMessageDialog(null, "Pregunta no encontrada");
-				}
-			} else {
-				if (userId == Integer.parseInt(id.getText())) {
-					QuestionQuerys.rmQuest(userId);
-					JOptionPane.showMessageDialog(null, "Pregunta eliminada");
-					new ChoiceWin();
-					this.dispose();
-				} else {
-					JOptionPane.showMessageDialog(null, "No eres el autor de la pregunta");
-				}
-			}
+        if (idText.isEmpty()) {
+            UiUtils.showError(this, "Ingrese el ID de la pregunta a eliminar.");
+            idField.requestFocusInWindow();
+            return;
         }
 
-        if (e.getSource() == volver) {
+        try {
+            int id = Integer.parseInt(idText);
+            QuestionQuerys.rmQuest(id);
+            UiUtils.showInfo(this, "Pregunta eliminada correctamente.");
+            dispose();
             new ChoiceWin();
-            this.dispose();
+        } catch (NumberFormatException ex) {
+            UiUtils.showError(this, "El ID debe ser un n�mero v�lido.");
+            idField.requestFocusInWindow();
         }
     }
-
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
 }

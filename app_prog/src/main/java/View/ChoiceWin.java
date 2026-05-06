@@ -1,83 +1,99 @@
 package View;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ChoiceWin extends JFrame implements MouseListener {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-    JButton crear = new JButton("Crear");
-    JButton modificar = new JButton("Modificar");
-    JButton eliminar = new JButton("Eliminar");
-    JButton buscar = new JButton("Buscar pregunta");
-    JButton examen = new JButton("Crear examen");
-    JButton logOut = new JButton("Cerrar sesion");
+public class ChoiceWin extends JFrame {
+
+    private JButton crear = new JButton("Crear pregunta");
+    private JButton modificar = new JButton("Modificar pregunta");
+    private JButton eliminar = new JButton("Eliminar pregunta");
+    private JButton buscar = new JButton("Buscar pregunta");
+    private JButton examen = new JButton("Crear examen");
+    private JButton logOut = new JButton("Cerrar sesion");
 
     public ChoiceWin() {
+        UiUtils.setupFrame(this, "Menu principal", 380, 380);
 
-        Container panel = this.getContentPane();
-        this.setBounds(400, 100, 300, 250);
-        panel.setLayout(new GridLayout(7, 1));
+        JPanel panel = UiUtils.createPanel();
+        JLabel title = UiUtils.createTitle("Gestion de preguntas");
+        panel.add(title, UiUtils.gbc(0, 0, 2));
 
-        panel.add(new JLabel("GESTIÓN DE PREGUNTAS"));
-        panel.add(crear);
-        panel.add(modificar);
-        panel.add(eliminar);
-        panel.add(buscar);
-        panel.add(examen);
-        panel.add(logOut);
+        panel.add(crear, UiUtils.gbc(0, 1, 2));
+        panel.add(modificar, UiUtils.gbc(0, 2, 2));
+        panel.add(eliminar, UiUtils.gbc(0, 3, 2));
+        panel.add(buscar, UiUtils.gbc(0, 4, 2));
+        panel.add(examen, UiUtils.gbc(0, 5, 2));
+        panel.add(logOut, UiUtils.gbc(0, 6, 2));
 
-        crear.addMouseListener(this);
-        modificar.addMouseListener(this);
-        eliminar.addMouseListener(this);
-        examen.addMouseListener(this);
-        buscar.addMouseListener(this);
-        logOut.addMouseListener(this);
+        UiUtils.styleButton(crear);
+        UiUtils.styleButton(modificar);
+        UiUtils.styleButton(eliminar);
+        UiUtils.styleButton(buscar);
+        UiUtils.styleButton(examen);
+        UiUtils.styleButton(logOut);
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+        setContentPane(panel);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        crear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new NewQuest();
+            }
+        });
+
+        modificar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new ModifyQuest();
+            }
+        });
+
+        eliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new DeleteQuest();
+            }
+        });
+
+        buscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SearchQuest();
+            }
+        });
+
+        examen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new CreateExam();
+            }
+        });
+
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new UserPwd();
+            }
+        });
     }
 
     public static void main(String[] args) {
         new ChoiceWin();
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-        if (e.getSource() == crear) {
-            new NewQuest();
-            this.dispose();
-        }
-
-        if (e.getSource() == modificar) {
-            new ModifyQuest();
-            this.dispose();
-        }
-
-        if (e.getSource() == eliminar) {
-            new DeleteQuest();
-            this.dispose();
-        }
-
-        if (e.getSource() == buscar) {
-            new SearchQuest();
-            this.dispose();
-        }
-
-        if (e.getSource() == examen) {
-            new CreateExam();
-            this.dispose();
-        }
-
-        if (e.getSource() == logOut) {
-            new UserPwd();
-            this.dispose();
-        }
-    }
-
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
 }

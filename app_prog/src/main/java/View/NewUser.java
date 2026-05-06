@@ -1,190 +1,128 @@
 package View;
 
-import java.awt.Container;
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import CRUD.UserQuerys;
 
-public class NewUser extends JFrame implements MouseListener, KeyListener
-{
-	public static NewUser nu;
+public class NewUser extends JFrame {
 
-	JLabel basePanel = new JLabel();
-	JLabel userText = new JLabel("Nombre de usuario:");
-	JLabel pwdText = new JLabel("Contraseña:");
-	JTextArea user = new JTextArea();
-	JTextArea pwd = new JTextArea();
-	JButton register = new JButton("Registrar");
-	JButton cancel = new JButton("Cancelar");
+    private JTextField userField = new JTextField(18);
+    private JPasswordField passwordField = new JPasswordField(18);
+    private JButton register = new JButton("Registrar");
+    private JButton cancel = new JButton("Cancelar");
 
-	public NewUser()
-	{
-		Container basePanel = this.getContentPane();
+    public NewUser() {
+        UiUtils.setupFrame(this, "Nuevo usuario", 380, 260);
 
-		this.setBounds(400 , 60, 300, 300);
+        JPanel panel = UiUtils.createPanel();
+        JLabel title = UiUtils.createTitle("Registrar nuevo usuario");
+        panel.add(title, UiUtils.gbc(0, 0, 2));
 
-		register.addMouseListener(this);
-		cancel.addMouseListener(this);
-		user.addKeyListener(this);
-		pwd.addKeyListener(this);
+        panel.add(new JLabel("Usuario:"), UiUtils.gbc(0, 1, 1));
+        panel.add(userField, UiUtils.gbc(1, 1, 1));
 
-		basePanel.setLayout(new GridLayout(3, 2));
-		basePanel.add(userText);
-		basePanel.add(user);
-		basePanel.add(pwdText);
-		basePanel.add(pwd);
-		basePanel.add(register);
-		basePanel.add(cancel);
-		basePanel.setVisible(true);
+        panel.add(new JLabel("Contrase�a:"), UiUtils.gbc(0, 2, 1));
+        panel.add(passwordField, UiUtils.gbc(1, 2, 1));
 
+        JPanel actions = new JPanel(new GridLayout(1, 2, 10, 0));
+        actions.add(cancel);
+        actions.add(register);
+        UiUtils.styleButton(cancel);
+        UiUtils.styleButton(register);
+        GridBagConstraints actionConstraints = UiUtils.gbc(0, 3, 2);
+        actionConstraints.fill = GridBagConstraints.NONE;
+        panel.add(actions, actionConstraints);
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setVisible(true);
-	}
+        setContentPane(panel);
+        getRootPane().setDefaultButton(register);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	public static void main(String[] args) {
-		nu = new NewUser();
-	}
+        register.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createAccount();
+            }
+        });
 
-	public boolean comprobar()
-	{
-		ResultSet rs = UserQuerys.getUserPwd();
-		try {
-			while (rs.next())
-			{
-				if (rs.getString("nombre").equals(user.getText()))
-				{
-					rs.close();
-					return true;
-				}
-			}
-			rs.close();
-			return false;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new UserPwd();
+            }
+        });
+    }
 
-	public boolean verifyPwd(String passwd) {
-		boolean spChars = passwd.matches(".*[!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~].*");
-		boolean lower = passwd.matches(".*[a-z].*");
-		boolean upper = passwd.matches(".*[A-Z].*");
-		boolean nums = passwd.matches(".*[0-9].*");
+    private void createAccount() {
+        String username = userField.getText().trim();
+        String password = new String(passwordField.getPassword());
 
-		if (passwd.length() < 12)
-			JOptionPane.showMessageDialog(null, "La contraseña debe de tener 12 o más carácteres");
-		else if (!lower)
-			JOptionPane.showMessageDialog(null, "La contraseña debe de tener minúsculas");
-		else if (!upper)
-			JOptionPane.showMessageDialog(null, "La contraseña debe de tener mayúsculas");
-		else if (!nums)
-			JOptionPane.showMessageDialog(null, "La contraseña debe de tener números");
-		else if (!spChars)
-			JOptionPane.showMessageDialog(null, "La contraseña debe de tener carácteres especiales (!, #, $, %, &, etc.)");
-		else
-			return true;
-		return false;
-	}
+        if (username.isEmpty()) {
+            UiUtils.showError(this, "Ingrese un nombre de usuario.");
+            userField.requestFocusInWindow();
+            return;
+        }
 
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		if (((JButton)e.getSource()).getText().equals("Registrar"))
-		{
-			if (comprobar())
-			{
-				JOptionPane.showMessageDialog(null, "Nombre de usuario ya registrado");
-				pwd.grabFocus();
-			}
-			else
-			{
-				if (verifyPwd(pwd.getText()))
-				{
-					UserQuerys.createUser(user.getText(), pwd.getText());
-					this.dispose();
-					UserPwd.up = new UserPwd();
-				}
-				else
-					pwd.grabFocus();
-			}
-		}
-		
-		if (((JButton)e.getSource()).getText().equals("Cancelar"))
-		{
-			this.dispose();
-			UserPwd.up = new UserPwd();
-		}
-	}
+        if (password.isEmpty()) {
+            UiUtils.showError(this, "Ingrese una contrase�a.");
+            passwordField.requestFocusInWindow();
+            return;
+        }
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
+        if (UserQuerys.userExists(username)) {
+            UiUtils.showError(this, "Nombre de usuario ya registrado.");
+            userField.requestFocusInWindow();
+            return;
+        }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
+        if (!verifyPwd(password)) {
+            passwordField.requestFocusInWindow();
+            return;
+        }
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
+        UserQuerys.createUser(username, password);
+        UiUtils.showInfo(this, "Usuario registrado correctamente.");
+        dispose();
+        new UserPwd();
+    }
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
+    private boolean verifyPwd(String passwd) {
+        boolean hasSpecial = passwd.matches(".*[!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\^_`{|}~].*");
+        boolean hasLower = passwd.matches(".*[a-z].*");
+        boolean hasUpper = passwd.matches(".*[A-Z].*");
+        boolean hasDigit = passwd.matches(".*[0-9].*");
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if ((e.getKeyChar() == '\n'))
-		{
-			if (user.hasFocus())
-			{
-				user.setText(user.getText().replace("\n", ""));
-				pwd.grabFocus();
-			}
-			else if (pwd.hasFocus())
-			{
-				pwd.setText(pwd.getText().replace("\n", ""));
-				if (comprobar())
-				{
-					pwd.grabFocus();
-					JOptionPane.showMessageDialog(null, "Nombre de usuario ya registrado");
-				}
-				else
-				{
-					if (verifyPwd(pwd.getText()))
-					{
-						UserQuerys.createUser(user.getText(), pwd.getText());
-						this.dispose();
-						UserPwd.up = new UserPwd();
-					}
-					else
-						pwd.grabFocus();
-				}
-			}
-		}
-		if (user.getText().length() >= 50 || pwd.getText().length() >= 50)
-			e.consume();
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-
+        if (passwd.length() < 12) {
+            UiUtils.showError(this, "La contrase�a debe tener 12 o m�s caracteres.");
+            return false;
+        }
+        if (!hasLower) {
+            UiUtils.showError(this, "La contrase�a debe contener min�sculas.");
+            return false;
+        }
+        if (!hasUpper) {
+            UiUtils.showError(this, "La contrase�a debe contener may�sculas.");
+            return false;
+        }
+        if (!hasDigit) {
+            UiUtils.showError(this, "La contrase�a debe contener n�meros.");
+            return false;
+        }
+        if (!hasSpecial) {
+            UiUtils.showError(this, "La contrase�a debe contener caracteres especiales.");
+            return false;
+        }
+        return true;
+    }
 }
