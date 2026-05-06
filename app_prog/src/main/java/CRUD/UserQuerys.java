@@ -7,15 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Model.Usuario;
+
 public class UserQuerys {
     private static String db_url = "jdbc:mariadb://localhost:3306/examquest_db";
     private static String db_user = "root";
     private static String db_pwd = "Admin1234";
 
     public static ResultSet getUserPwd() {
-        try {
-            Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd);
-            Statement stmt = conn.createStatement();
+        try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
             return stmt.executeQuery("SELECT id, nombre, password_hash FROM usuario");
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,6 +80,51 @@ public class UserQuerys {
             return -1;
         }
     }
+
+    public static int getUserId(String username) {
+        try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd);
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt
+                        .executeQuery("SELECT id FROM usuario WHERE nombre = '" + username + "';")) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+	public static String getUserName(int id) {
+		String query = "SELECT nombre FROM usuario WHERE id = ?";
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd);
+				PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return rs.getString(1);
+				}
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static void logOperation(int userId, String tipo, String descripcion) {
+		String query = "INSERT INTO operacion (usuario_id, tipo, fecha, descripcion) VALUES (?, ?, CURDATE(), ?)";
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd);
+				PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setInt(1, userId);
+			stmt.setString(2, tipo);
+			stmt.setString(3, descripcion);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
     private static String hashPwd(String pwd) {
         return Integer.toString(pwd.hashCode());

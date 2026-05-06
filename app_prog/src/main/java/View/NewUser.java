@@ -95,6 +95,7 @@ public class NewUser extends JFrame {
         }
 
         UserQuerys.createUser(username, password);
+		UserQuerys.logOperation(UserQuerys.getUserId(username), "Nuevo Usuario", username + " registrado");
         UiUtils.showInfo(this, "Usuario registrado correctamente.");
         dispose();
         new UserPwd();

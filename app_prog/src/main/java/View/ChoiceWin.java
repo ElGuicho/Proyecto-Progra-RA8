@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import CRUD.UserQuerys;
+
 public class ChoiceWin extends JFrame {
 
     private JButton crear = new JButton("Crear pregunta");
@@ -117,6 +119,8 @@ public class ChoiceWin extends JFrame {
         logOut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+				int id = UserQuerys.getUserId();
+				UserQuerys.logOperation(id, "Cierre de Sesion", UserQuerys.getUserName(id) + " cerro sesion");
                 dispose();
                 new UserPwd();
             }

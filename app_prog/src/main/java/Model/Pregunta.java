@@ -32,6 +32,17 @@ public abstract class Pregunta {
 		this.palabrasClave = palabrasClave;
 	}
 
+	public Pregunta(int id, String autor, String curso, String grupo, String modulo, String ra, String tema, List<String> palabrasClave) {
+		this.id = id;
+		this.autor = autor;
+		this.curso = curso;
+		this.grupo = grupo;
+		this.modulo = modulo;
+		this.ra = ra;
+		this.tema = tema;
+		this.palabrasClave = palabrasClave;
+	}
+
 	public boolean coincideFiltro(){
 		// Si el filtrado es correcto, recoger id.
 		return true;

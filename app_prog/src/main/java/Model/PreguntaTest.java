@@ -17,6 +17,11 @@ public class PreguntaTest extends Pregunta {
 		this.correcta = correcta;
 	}
 
+	public PreguntaTest(int id, String autor, String curso, String grupo, String modulo, String ra, String tema,
+		 List<String> palabrasClave) {
+		super(id, autor, curso, grupo, modulo, ra, tema, palabrasClave);
+	}
+
 	public List<String> getOpciones() {
 		return opciones;
 	}

@@ -8,9 +8,9 @@ public class Operacion extends Usuario{
 	private LocalDate fecha;
 	private String descripcion;
 	
-	public Operacion(int id, String nombre, String password, int id2, String tipo, LocalDate fecha,
+	public Operacion(int id, String nombre, int id2, String tipo, LocalDate fecha,
 			String descripcion) {
-		super(id, nombre, password);
+		super(id, nombre);
 		id = id2;
 		this.tipo = tipo;
 		this.fecha = fecha;

@@ -101,6 +101,7 @@ public class UserPwd extends JFrame {
 		}
 
 		if (UserQuerys.authenticateUser(username, password)) {
+			UserQuerys.logOperation(UserQuerys.getUserId(username), "Inicio de sesion", username + " inicio sesion");
 			dispose();
 			new ChoiceWin();
 		} else {

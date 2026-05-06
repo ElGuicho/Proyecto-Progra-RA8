@@ -14,6 +14,11 @@ public class PreguntaDesarrollo extends Pregunta {
 		this.respuestaModelo = respuestaModelo;
 	}
 
+	public PreguntaDesarrollo(int id, String autor, String curso, String grupo, String modulo, String ra, String tema,
+		 List<String> palabrasClave) {
+		super(id, autor, curso, grupo, modulo, ra, tema, palabrasClave);
+	}
+
 	public String getRespuestaModelo() {
 		return respuestaModelo;
 	}

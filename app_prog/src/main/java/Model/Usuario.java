@@ -13,6 +13,11 @@ public class Usuario {
 		this.passwordHash = Integer.toString(passwordHash.hashCode());
 	}
 
+	public Usuario(int id, String nombre) {
+		this.id = id;
+		this.nombre = nombre;
+	}
+
 	public boolean verificarPassword(ResultSet rs){
 		try {
 			while (rs.next())
