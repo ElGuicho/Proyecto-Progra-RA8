@@ -18,14 +18,19 @@ public class NewQuest extends JFrame {
     private JButton continuar = new JButton("Continuar");
 
     public NewQuest() {
-        UiUtils.setupFrame(this, "Tipo de pregunta", 380, 240);
+        UiUtils.setupFrame(this, "Tipo de pregunta", 460, 260);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Selecciona el tipo de pregunta"), UiUtils.gbc(0, 0, 2));
 
         ButtonGroup group = new ButtonGroup();
         group.add(testOption);
         group.add(desarrolloOption);
+        testOption.setSelected(true);
+
+        UiUtils.styleRadioButton(testOption);
+        UiUtils.styleRadioButton(desarrolloOption);
 
         panel.add(testOption, UiUtils.gbc(0, 1, 2));
         panel.add(desarrolloOption, UiUtils.gbc(0, 2, 2));
@@ -33,7 +38,8 @@ public class NewQuest extends JFrame {
 
         UiUtils.styleButton(continuar);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

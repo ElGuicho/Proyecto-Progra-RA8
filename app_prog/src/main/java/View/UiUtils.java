@@ -2,6 +2,8 @@ package View;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -11,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
@@ -62,12 +66,45 @@ public class UiUtils {
         return panel;
     }
 
+    public static JPanel createAppPanel() {
+        JPanel panel = new JPanel(new java.awt.BorderLayout());
+        panel.setBackground(new Color(240, 244, 250));
+        panel.setBorder(new EmptyBorder(16, 16, 16, 16));
+        return panel;
+    }
+
+    public static JPanel createCardPanel() {
+        JPanel panel = new JPanel(new java.awt.GridBagLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setOpaque(true);
+        panel.setBorder(new javax.swing.border.CompoundBorder(
+                new javax.swing.border.LineBorder(new Color(220, 220, 220), 1, true),
+                new EmptyBorder(20, 20, 20, 20)));
+        return panel;
+    }
+
     public static void styleButton(JButton button) {
         button.setOpaque(true);
         button.setBackground(new Color(38, 110, 218));
         button.setForeground(Color.WHITE);
-        button.setBorder(new EmptyBorder(8, 12, 8, 12));
-        button.setFont(button.getFont().deriveFont(Font.BOLD, 13f));
+        button.setBorder(new EmptyBorder(10, 14, 10, 14));
+        button.setFont(button.getFont().deriveFont(Font.BOLD, 14f));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(280, 42));
+    }
+
+    public static void styleTextArea(JTextArea area) {
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        area.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        area.setBorder(new EmptyBorder(10, 10, 10, 10));
+        area.setBackground(new Color(250, 252, 255));
+    }
+
+    public static void styleRadioButton(JRadioButton radioButton) {
+        radioButton.setBackground(new Color(240, 244, 250));
+        radioButton.setFont(radioButton.getFont().deriveFont(Font.PLAIN, 13f));
     }
 
     public static void showInfo(Component parent, String message) {

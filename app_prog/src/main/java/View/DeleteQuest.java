@@ -20,9 +20,10 @@ public class DeleteQuest extends JFrame {
     private JButton volver = new JButton("Volver");
 
     public DeleteQuest() {
-        UiUtils.setupFrame(this, "Eliminar pregunta", 380, 220);
+        UiUtils.setupFrame(this, "Eliminar pregunta", 460, 240);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Eliminar pregunta"), UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("ID de la pregunta:"), UiUtils.gbc(0, 1, 1));
@@ -34,7 +35,8 @@ public class DeleteQuest extends JFrame {
         UiUtils.styleButton(eliminar);
         UiUtils.styleButton(volver);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

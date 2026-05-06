@@ -27,9 +27,10 @@ public class CreateExam extends JFrame {
     private JButton volver = new JButton("Volver");
 
     public CreateExam() {
-        UiUtils.setupFrame(this, "Crear examen", 600, 520);
+        UiUtils.setupFrame(this, "Crear examen", 640, 560);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Crear examen"), UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("Cantidad de preguntas:"), UiUtils.gbc(0, 1, 1));
@@ -40,6 +41,9 @@ public class CreateExam extends JFrame {
         typeGroup.add(desarrolloOption);
         testOption.setSelected(true);
 
+        UiUtils.styleRadioButton(testOption);
+        UiUtils.styleRadioButton(desarrolloOption);
+
         panel.add(testOption, UiUtils.gbc(0, 2, 1));
         panel.add(desarrolloOption, UiUtils.gbc(1, 2, 1));
 
@@ -47,15 +51,14 @@ public class CreateExam extends JFrame {
         panel.add(volver, UiUtils.gbc(1, 3, 1));
 
         previewArea.setEditable(false);
-        previewArea.setLineWrap(true);
-        previewArea.setWrapStyleWord(true);
-        previewArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+        UiUtils.styleTextArea(previewArea);
         panel.add(new JScrollPane(previewArea), UiUtils.gbc(0, 4, 2));
 
         UiUtils.styleButton(generar);
         UiUtils.styleButton(volver);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

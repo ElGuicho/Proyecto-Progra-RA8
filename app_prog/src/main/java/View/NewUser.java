@@ -22,19 +22,21 @@ public class NewUser extends JFrame {
     private JButton cancel = new JButton("Cancelar");
 
     public NewUser() {
-        UiUtils.setupFrame(this, "Nuevo usuario", 380, 260);
+        UiUtils.setupFrame(this, "Nuevo usuario", 480, 300);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         JLabel title = UiUtils.createTitle("Registrar nuevo usuario");
         panel.add(title, UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("Usuario:"), UiUtils.gbc(0, 1, 1));
         panel.add(userField, UiUtils.gbc(1, 1, 1));
 
-        panel.add(new JLabel("Contrase�a:"), UiUtils.gbc(0, 2, 1));
+        panel.add(new JLabel("Contrasena:"), UiUtils.gbc(0, 2, 1));
         panel.add(passwordField, UiUtils.gbc(1, 2, 1));
 
         JPanel actions = new JPanel(new GridLayout(1, 2, 10, 0));
+        actions.setOpaque(false);
         actions.add(cancel);
         actions.add(register);
         UiUtils.styleButton(cancel);
@@ -43,7 +45,8 @@ public class NewUser extends JFrame {
         actionConstraints.fill = GridBagConstraints.NONE;
         panel.add(actions, actionConstraints);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         getRootPane().setDefaultButton(register);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

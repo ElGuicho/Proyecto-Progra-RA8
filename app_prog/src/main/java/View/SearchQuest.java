@@ -29,9 +29,10 @@ public class SearchQuest extends JFrame {
     private JButton volver = new JButton("Volver");
 
     public SearchQuest() {
-        UiUtils.setupFrame(this, "Buscar pregunta", 520, 500);
+        UiUtils.setupFrame(this, "Buscar pregunta", 600, 520);
 
-        JPanel panel = UiUtils.createPanel();
+        JPanel outerPanel = UiUtils.createAppPanel();
+        JPanel panel = UiUtils.createCardPanel();
         panel.add(UiUtils.createTitle("Buscar preguntas"), UiUtils.gbc(0, 0, 2));
 
         panel.add(new JLabel("ID:"), UiUtils.gbc(0, 1, 1));
@@ -48,22 +49,23 @@ public class SearchQuest extends JFrame {
         typeGroup.add(desarrolloOption);
         testOption.setSelected(true);
 
+        UiUtils.styleRadioButton(testOption);
+        UiUtils.styleRadioButton(desarrolloOption);
+
         panel.add(testOption, UiUtils.gbc(0, 4, 1));
         panel.add(desarrolloOption, UiUtils.gbc(1, 4, 1));
 
         panel.add(buscar, UiUtils.gbc(0, 5, 1));
         panel.add(volver, UiUtils.gbc(1, 5, 1));
 
+        UiUtils.styleTextArea(resultsArea);
         resultsArea.setEditable(false);
-        resultsArea.setLineWrap(true);
-        resultsArea.setWrapStyleWord(true);
-        resultsArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-
         panel.add(new JScrollPane(resultsArea), UiUtils.gbc(0, 6, 2));
         UiUtils.styleButton(buscar);
         UiUtils.styleButton(volver);
 
-        setContentPane(panel);
+        outerPanel.add(panel, java.awt.BorderLayout.CENTER);
+        setContentPane(outerPanel);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
