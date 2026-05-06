@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import CRUD.QuestionQuerys;
+import CRUD.UserQuerys;
 import Model.Pregunta;
 import Model.PreguntaDesarrollo;
 import Model.PreguntaTest;
@@ -39,6 +40,7 @@ public class DeleteQuest extends JFrame implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
 		boolean isfalse = true;
+		int userId = UserQuerys.getUserId();
 		Pregunta delQuest;
 
         if (e.getSource() == eliminar) {
@@ -49,18 +51,26 @@ public class DeleteQuest extends JFrame implements MouseListener {
 					delQuest =  new PreguntaDesarrollo(/*Atributos filtro*/);
 
 				if (delQuest.coincideFiltro()) {
-					QuestionQuerys.rmQuest(delQuest.getId());
-					JOptionPane.showMessageDialog(null, "Pregunta eliminada");
-					new ChoiceWin();
-					this.dispose();
+					if (userId == delQuest.getId()) {
+						QuestionQuerys.rmQuest(delQuest.getId());
+						JOptionPane.showMessageDialog(null, "Pregunta eliminada");
+						new ChoiceWin();
+						this.dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "No eres el autor de la pregunta");
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Pregunta no encontrada");
 				}
 			} else {
-				QuestionQuerys.rmQuest(Integer.parseInt(id.getText()));
-				JOptionPane.showMessageDialog(null, "Pregunta eliminada");
-				new ChoiceWin();
-				this.dispose();
+				if (userId == Integer.parseInt(id.getText())) {
+					QuestionQuerys.rmQuest(userId);
+					JOptionPane.showMessageDialog(null, "Pregunta eliminada");
+					new ChoiceWin();
+					this.dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "No eres el autor de la pregunta");
+				}
 			}
         }
 

@@ -33,6 +33,7 @@ public abstract class Pregunta {
 	}
 
 	public boolean coincideFiltro(){
+		// Si el filtrado es correcto, recoger id.
 		return true;
 	}
 

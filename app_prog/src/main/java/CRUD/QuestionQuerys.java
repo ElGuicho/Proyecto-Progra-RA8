@@ -56,7 +56,7 @@ public class QuestionQuerys {
 
 	public static void rmQuest(int id) {
 		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
-			stmt.executeUpdate("DELETE FROM pregunta where id = " + Integer.toString(id) + ";");
+				stmt.executeUpdate("DELETE FROM pregunta where id = " + Integer.toString(id) + ";");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -119,26 +119,17 @@ public class QuestionQuerys {
 	public static ResultSet searchQuest(HashMap<String, String> filtros, boolean isTest) {
 		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
 			String query = "";
+			String table = isTest ? "pregunta_test" : "pregunta_desarrollo";
 
 			if (filtros.isEmpty()) {
-				if (isTest)
-					query = "SELECT * FROM pregunta p JOIN pregunta_test pt ON p.id = pt.pregunta_id;";
-				else
-					query = "SELECT * FROM pregunta p JOIN pregunta_desarrollo pd ON p.id = pd.pregunta_id;";
+				query = "SELECT * FROM pregunta p JOIN " + table + " pt ON p.id = pt.pregunta_id;";
 				ResultSet rs = stmt.executeQuery(query);
 				return rs;
 			}
-			if (isTest) {
-				query = "SELECT * FROM pregunta p JOIN pregunta_test pt ON p.id = pt.pregunta_id WHERE ";
-				for (String key : filtros.keySet()) {
-					if (!key.equals("correcta"))
-						query += key + " = '" + filtros.get(key) + "' AND ";
-				}
-			} else {
-				query = "SELECT * FROM pregunta p JOIN pregunta_desarrollo pd ON p.id = pd.pregunta_id WHERE ";
-				for (String key : filtros.keySet()) {
+			query = "SELECT * FROM pregunta p JOIN " + table + " pt ON p.id = pt.pregunta_id WHERE ";
+			for (String key : filtros.keySet()) {
+				if (!key.equals("correcta"))
 					query += key + " = '" + filtros.get(key) + "' AND ";
-				}
 			}
 			query = query.substring(0, query.length() - 5);
 			query += ";";

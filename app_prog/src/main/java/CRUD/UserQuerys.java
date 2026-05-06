@@ -29,4 +29,13 @@ public class UserQuerys {
 			e.printStackTrace();
 		}
 	}
+
+	public static int getUserId() {
+		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd); Statement stmt = conn.createStatement()) {
+			return stmt.executeQuery("SELECT usuario_id FROM operacion WHERE id = (SELECT MAX(id) FROM operacion);").getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }
