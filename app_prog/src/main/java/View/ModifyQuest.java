@@ -291,7 +291,7 @@ public class ModifyQuest extends JFrame {
 
 			String title = question instanceof PreguntaTest ? "Modificar Pregunta Test"
 					: "Modificar Pregunta Desarrollo";
-			UiUtils.setupFrame(this, title, 600, question instanceof PreguntaTest ? 750 : 650);
+			UiUtils.setupFrame(this, title, 1000, question instanceof PreguntaTest ? 550 : 550);
 
 			JPanel panel = UiUtils.createCardPanel();
 			int row = 0;
@@ -313,22 +313,22 @@ public class ModifyQuest extends JFrame {
 			palabrasField = new JTextField(String.join(", ", keywords), 20);
 
 			panel.add(new JLabel("Curso:"), UiUtils.gbc(0, row, 1));
-			panel.add(cursoField, UiUtils.gbc(1, row++, 1));
+			panel.add(cursoField, UiUtils.gbc(1, row, 1));
 
-			panel.add(new JLabel("Grupo:"), UiUtils.gbc(0, row, 1));
-			panel.add(grupoField, UiUtils.gbc(1, row++, 1));
+			panel.add(new JLabel("Grupo:"), UiUtils.gbc(2, row, 1));
+			panel.add(grupoField, UiUtils.gbc(3, row++, 1));
 
 			panel.add(new JLabel("Módulo:"), UiUtils.gbc(0, row, 1));
-			panel.add(moduloField, UiUtils.gbc(1, row++, 1));
+			panel.add(moduloField, UiUtils.gbc(1, row, 1));
 
-			panel.add(new JLabel("RA:"), UiUtils.gbc(0, row, 1));
-			panel.add(raField, UiUtils.gbc(1, row++, 1));
+			panel.add(new JLabel("RA:"), UiUtils.gbc(2, row, 1));
+			panel.add(raField, UiUtils.gbc(3, row++, 1));
 
 			panel.add(new JLabel("Tema:"), UiUtils.gbc(0, row, 1));
-			panel.add(temaField, UiUtils.gbc(1, row++, 1));
+			panel.add(temaField, UiUtils.gbc(1, row, 1));
 
-			panel.add(new JLabel("Enunciado:"), UiUtils.gbc(0, row, 1));
-			panel.add(enunciadoField, UiUtils.gbc(1, row++, 1));
+			panel.add(new JLabel("Enunciado:"), UiUtils.gbc(2, row, 1));
+			panel.add(enunciadoField, UiUtils.gbc(3, row++, 1));
 
 			if (question instanceof PreguntaTest) {
 				PreguntaTest pt = (PreguntaTest) question;
@@ -339,29 +339,29 @@ public class ModifyQuest extends JFrame {
 				correctaField = new JTextField(String.valueOf(pt.getCorrecta()), 20);
 
 				panel.add(new JLabel("Opción 1:"), UiUtils.gbc(0, row, 1));
-				panel.add(opcion1Field, UiUtils.gbc(1, row++, 1));
+				panel.add(opcion1Field, UiUtils.gbc(1, row, 1));
 
-				panel.add(new JLabel("Opción 2:"), UiUtils.gbc(0, row, 1));
-				panel.add(opcion2Field, UiUtils.gbc(1, row++, 1));
+				panel.add(new JLabel("Opción 2:"), UiUtils.gbc(2, row, 1));
+				panel.add(opcion2Field, UiUtils.gbc(3, row++, 1));
 
 				panel.add(new JLabel("Opción 3:"), UiUtils.gbc(0, row, 1));
-				panel.add(opcion3Field, UiUtils.gbc(1, row++, 1));
+				panel.add(opcion3Field, UiUtils.gbc(1, row, 1));
 
-				panel.add(new JLabel("Opción 4:"), UiUtils.gbc(0, row, 1));
-				panel.add(opcion4Field, UiUtils.gbc(1, row++, 1));
+				panel.add(new JLabel("Opción 4:"), UiUtils.gbc(2, row, 1));
+				panel.add(opcion4Field, UiUtils.gbc(3, row++, 1));
 
 				panel.add(new JLabel("Correcta (1-4):"), UiUtils.gbc(0, row, 1));
-				panel.add(correctaField, UiUtils.gbc(1, row++, 1));
+				panel.add(correctaField, UiUtils.gbc(1, row, 1));
 			} else {
 				PreguntaDesarrollo pd = (PreguntaDesarrollo) question;
 				respuestaField = new JTextField(pd.getRespuestaModelo(), 20);
 
 				panel.add(new JLabel("Respuesta Modelo:"), UiUtils.gbc(0, row, 1));
-				panel.add(respuestaField, UiUtils.gbc(1, row++, 1));
+				panel.add(respuestaField, UiUtils.gbc(1, row, 1));
 			}
 
-			panel.add(new JLabel("Palabras Clave:"), UiUtils.gbc(0, row, 1));
-			panel.add(palabrasField, UiUtils.gbc(1, row++, 1));
+			panel.add(new JLabel("Palabras Clave:"), UiUtils.gbc(2, row, 1));
+			panel.add(palabrasField, UiUtils.gbc(3, row++, 1));
 
 			JPanel buttonPanel = UiUtils.createCardPanel();
 			guardar = new JButton("Guardar");
