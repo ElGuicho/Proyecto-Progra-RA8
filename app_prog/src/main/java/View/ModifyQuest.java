@@ -22,6 +22,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import CRUD.QuestionQuerys;
+import CRUD.UserQuerys;
 import Model.Pregunta;
 import Model.PreguntaDesarrollo;
 import Model.PreguntaTest;
@@ -458,6 +459,8 @@ public class ModifyQuest extends JFrame {
 				if (success) {
 					JOptionPane.showMessageDialog(this, "Pregunta modificada correctamente.", "Éxito",
 							JOptionPane.INFORMATION_MESSAGE);
+					UserQuerys.logOperation(UserQuerys.getUserId(), "Modificar pregunta",
+							UserQuerys.getUserName(UserQuerys.getUserId()) + " modificó la pregunta con ID " + question.getId());
 					parentWindow.dispose();
 					dispose();
 					// Refresh the main window

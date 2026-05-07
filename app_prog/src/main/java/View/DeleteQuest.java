@@ -21,6 +21,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import CRUD.QuestionQuerys;
+import CRUD.UserQuerys;
 import Model.Pregunta;
 import Model.PreguntaTest;
 
@@ -289,6 +290,8 @@ public class DeleteQuest extends JFrame {
 			if (QuestionQuerys.rmQuest(id)) {
 				JOptionPane.showMessageDialog(this, "Pregunta eliminada correctamente.", "Éxito",
 						JOptionPane.INFORMATION_MESSAGE);
+				UserQuerys.logOperation(UserQuerys.getUserId(), "Eliminar pregunta",
+						UserQuerys.getUserName(UserQuerys.getUserId()) + " eliminó la pregunta con ID " + id);
 				dispose();
 				// Refresh the main window
 			} else {
