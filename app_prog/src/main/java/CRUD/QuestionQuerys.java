@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class QuestionQuerys {
 		Connection conn = null;
 		int preguntaId = 0;
 		try {
+			// Validate respuesta_modelo
+			if (p.getRespuestaModelo() == null || p.getRespuestaModelo().trim().isEmpty()) {
+				throw new IllegalArgumentException("La respuesta modelo no puede ser vacía");
+			}
+
 			conn = DriverManager.getConnection(db_url, db_user, db_pwd);
 			conn.setAutoCommit(false);
 			try (PreparedStatement preguntaStmt = conn.prepareStatement(preguntaQuery, Statement.RETURN_GENERATED_KEYS);
@@ -44,9 +50,12 @@ public class QuestionQuerys {
 				try (ResultSet rs = preguntaStmt.getGeneratedKeys()) {
 					if (rs.next()) {
 						preguntaId = rs.getInt(1);
+						System.out.println("Pregunta creada con ID: " + preguntaId);
 						desarrolloStmt.setInt(1, preguntaId);
-						desarrolloStmt.setString(2, p.getRespuestaModelo());
+						desarrolloStmt.setString(2, p.getRespuestaModelo().trim());
+						System.out.println("Insertando DESARROLLO: preguntaId=" + preguntaId);
 						desarrolloStmt.executeUpdate();
+						System.out.println("DESARROLLO insertado correctamente");
 						// Insert keywords
 						for (String kw : p.getPalabrasClave()) {
 							keywordStmt.setInt(1, preguntaId);
@@ -54,6 +63,8 @@ public class QuestionQuerys {
 							keywordStmt.addBatch();
 						}
 						keywordStmt.executeBatch();
+					} else {
+						throw new SQLException("No se pudo obtener el ID de la pregunta generada");
 					}
 				}
 			}
@@ -86,6 +97,20 @@ public class QuestionQuerys {
 		Connection conn = null;
 		int preguntaId = 0;
 		try {
+			// Validate options before proceeding
+			List<String> opciones = p.getOpciones();
+			if (opciones == null || opciones.size() < 4) {
+				throw new IllegalArgumentException("Opciones inválidas: se requieren 4 opciones");
+			}
+			for (int i = 0; i < 4; i++) {
+				if (opciones.get(i) == null || opciones.get(i).trim().isEmpty()) {
+					throw new IllegalArgumentException("Opción " + (i + 1) + " no puede ser vacía");
+				}
+			}
+			if (p.getCorrecta() < 1 || p.getCorrecta() > 4) {
+				throw new IllegalArgumentException("Opción correcta debe estar entre 1 y 4");
+			}
+
 			conn = DriverManager.getConnection(db_url, db_user, db_pwd);
 			conn.setAutoCommit(false);
 			try (PreparedStatement preguntaStmt = conn.prepareStatement(preguntaQuery, Statement.RETURN_GENERATED_KEYS);
@@ -103,14 +128,17 @@ public class QuestionQuerys {
 				try (ResultSet rs = preguntaStmt.getGeneratedKeys()) {
 					if (rs.next()) {
 						preguntaId = rs.getInt(1);
+						System.out.println("Pregunta creada con ID: " + preguntaId);
 						testStmt.setInt(1, preguntaId);
-						List<String> opciones = p.getOpciones();
-						testStmt.setString(2, opciones.get(0));
-						testStmt.setString(3, opciones.get(1));
-						testStmt.setString(4, opciones.get(2));
-						testStmt.setString(5, opciones.get(3));
+						testStmt.setString(2, opciones.get(0).trim());
+						testStmt.setString(3, opciones.get(1).trim());
+						testStmt.setString(4, opciones.get(2).trim());
+						testStmt.setString(5, opciones.get(3).trim());
 						testStmt.setInt(6, p.getCorrecta());
+						System.out
+								.println("Insertando TEST: preguntaId=" + preguntaId + ", correcta=" + p.getCorrecta());
 						testStmt.executeUpdate();
+						System.out.println("TEST insertado correctamente");
 						// Insert keywords
 						for (String kw : p.getPalabrasClave()) {
 							keywordStmt.setInt(1, preguntaId);
@@ -118,6 +146,8 @@ public class QuestionQuerys {
 							keywordStmt.addBatch();
 						}
 						keywordStmt.executeBatch();
+					} else {
+						throw new SQLException("No se pudo obtener el ID de la pregunta generada");
 					}
 				}
 			}
@@ -130,6 +160,10 @@ public class QuestionQuerys {
 					ex.printStackTrace();
 				}
 			}
+			System.err.println("Error al crear pregunta TEST: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			System.err.println("Validación fallida: " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {
@@ -188,7 +222,8 @@ public class QuestionQuerys {
 		StringBuilder query = new StringBuilder();
 		String table = isTest ? "pregunta_test" : "pregunta_desarrollo";
 		String alias = isTest ? "pt" : "pd";
-		query.append("SELECT p.id, p.autor, p.curso, p.grupo, p.modulo, p.ra, p.tema, p.enunciado, p.fecha_creacion");
+		query.append(
+				"SELECT DISTINCT p.id, p.autor, p.curso, p.grupo, p.modulo, p.ra, p.tema, p.enunciado, p.fecha_creacion");
 		if (isTest) {
 			query.append(", pt.opcion1, pt.opcion2, pt.opcion3, pt.opcion4, pt.correcta");
 		} else {
@@ -197,12 +232,36 @@ public class QuestionQuerys {
 		query.append(" FROM pregunta p JOIN ").append(table).append(" ").append(alias).append(" ON p.id = ")
 				.append(alias).append(".pregunta_id");
 
+		List<String> keywordList = null;
+		if (filtros.containsKey("palabras_clave") && !filtros.get("palabras_clave").trim().isEmpty()) {
+			String keywordsStr = filtros.get("palabras_clave").trim();
+			keywordList = Arrays.asList(keywordsStr.split(","));
+			// Remove from filtros to handle separately
+			filtros.remove("palabras_clave");
+		}
+
 		if (!filtros.isEmpty()) {
 			query.append(" WHERE ");
 			for (String key : filtros.keySet()) {
-				query.append(key).append(" = ? AND ");
+				query.append("p.").append(key).append(" = ? AND ");
 			}
 			query.setLength(query.length() - 5);
+		}
+
+		if (keywordList != null && !keywordList.isEmpty()) {
+			if (!filtros.isEmpty()) {
+				query.append(" AND ");
+			} else {
+				query.append(" WHERE ");
+			}
+			query.append("EXISTS (SELECT 1 FROM palabra_clave pc WHERE pc.pregunta_id = p.id AND pc.palabra IN (");
+			for (int i = 0; i < keywordList.size(); i++) {
+				query.append("?");
+				if (i < keywordList.size() - 1) {
+					query.append(",");
+				}
+			}
+			query.append("))");
 		}
 
 		List<Pregunta> results = new ArrayList<>();
@@ -211,6 +270,11 @@ public class QuestionQuerys {
 			int index = 1;
 			for (String key : filtros.keySet()) {
 				stmt.setString(index++, filtros.get(key));
+			}
+			if (keywordList != null && !keywordList.isEmpty()) {
+				for (String kw : keywordList) {
+					stmt.setString(index++, kw.trim());
+				}
 			}
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {

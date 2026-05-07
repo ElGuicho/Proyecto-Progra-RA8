@@ -32,13 +32,13 @@ public class AddText extends JFrame {
 		panel.add(UiUtils.createTitle("Nueva pregunta de desarrollo"), UiUtils.gbc(0, 0, 2));
 
 		panel.add(new JLabel("Enunciado:"), UiUtils.gbc(0, 1, 1));
-		panel.add(enunciadoField, UiUtils.gbc(1, 1, 1));
+		panel.add(enunciadoField, UiUtils.gbc(0, 2, 2));
 
-		panel.add(new JLabel("Respuesta modelo:"), UiUtils.gbc(0, 2, 1));
-		panel.add(new JScrollPane(respuestaArea), UiUtils.gbc(1, 2, 1));
+		panel.add(new JLabel("Respuesta modelo:"), UiUtils.gbc(0, 3, 1));
+		panel.add(new JScrollPane(respuestaArea), UiUtils.gbc(0, 4, 2));
 
-		panel.add(guardar, UiUtils.gbc(0, 3, 1));
-		panel.add(volver, UiUtils.gbc(1, 3, 1));
+		panel.add(guardar, UiUtils.gbc(0, 5, 1));
+		panel.add(volver, UiUtils.gbc(1, 5, 1));
 
 		UiUtils.styleButton(guardar);
 		UiUtils.styleButton(volver);
