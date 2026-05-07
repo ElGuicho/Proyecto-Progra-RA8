@@ -24,6 +24,7 @@ public class CreateExam extends JFrame {
     private JRadioButton desarrolloOption = new JRadioButton("Preguntas tipo DESARROLLO");
     private JTextArea previewArea = new JTextArea(14, 36);
     private JButton generar = new JButton("Generar examen");
+    private JButton banco = new JButton("Banco de preguntas");
     private JButton volver = new JButton("Volver");
 
     public CreateExam() {
@@ -48,13 +49,15 @@ public class CreateExam extends JFrame {
         panel.add(desarrolloOption, UiUtils.gbc(1, 2, 1));
 
         panel.add(generar, UiUtils.gbc(0, 3, 1));
-        panel.add(volver, UiUtils.gbc(1, 3, 1));
+        panel.add(banco, UiUtils.gbc(1, 3, 1));
+        panel.add(volver, UiUtils.gbc(0, 4, 2));
 
         previewArea.setEditable(false);
         UiUtils.styleTextArea(previewArea);
         panel.add(new JScrollPane(previewArea), UiUtils.gbc(0, 4, 2));
 
         UiUtils.styleButton(generar);
+        UiUtils.styleButton(banco);
         UiUtils.styleButton(volver);
 
         outerPanel.add(panel, java.awt.BorderLayout.CENTER);
@@ -66,6 +69,14 @@ public class CreateExam extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 generateExam();
+            }
+        });
+
+        banco.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SearchQuest();
             }
         });
 
