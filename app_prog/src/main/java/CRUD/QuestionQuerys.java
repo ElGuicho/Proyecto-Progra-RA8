@@ -194,14 +194,63 @@ public class QuestionQuerys {
 		return keywords;
 	}
 
-	public static void rmQuest(int id) {
-		String query = "DELETE FROM pregunta WHERE id = ?";
-		try (Connection conn = DriverManager.getConnection(db_url, db_user, db_pwd);
-				PreparedStatement stmt = conn.prepareStatement(query)) {
-			stmt.setInt(1, id);
-			stmt.executeUpdate();
+	public static boolean rmQuest(int id) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(db_url, db_user, db_pwd);
+			conn.setAutoCommit(false);
+
+			// Delete keywords first
+			String deleteKeywords = "DELETE FROM palabra_clave WHERE pregunta_id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(deleteKeywords)) {
+				stmt.setInt(1, id);
+				stmt.executeUpdate();
+			}
+
+			// Delete from pregunta_test or pregunta_desarrollo
+			String deleteTestQuest = "DELETE FROM pregunta_test WHERE pregunta_id = ?";
+			String deleteDevQuest = "DELETE FROM pregunta_desarrollo WHERE pregunta_id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(deleteTestQuest)) {
+				stmt.setInt(1, id);
+				stmt.executeUpdate();
+			}
+			try (PreparedStatement stmt = conn.prepareStatement(deleteDevQuest)) {
+				stmt.setInt(1, id);
+				stmt.executeUpdate();
+			}
+
+			// Finally delete from pregunta
+			String deleteQuestion = "DELETE FROM pregunta WHERE id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(deleteQuestion)) {
+				stmt.setInt(1, id);
+				int result = stmt.executeUpdate();
+				if (result == 0) {
+					conn.rollback();
+					return false;
+				}
+			}
+
+			conn.commit();
+			return true;
 		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
 			e.printStackTrace();
+			return false;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -216,6 +265,166 @@ public class QuestionQuerys {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public static boolean updateTestQuestion(int id, String curso, String grupo, String modulo, String ra, String tema,
+			String enunciado, List<String> opciones, int correcta, List<String> palabrasClave) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(db_url, db_user, db_pwd);
+			conn.setAutoCommit(false);
+
+			// Update main question table
+			String updatePregunta = "UPDATE pregunta SET curso = ?, grupo = ?, modulo = ?, ra = ?, tema = ?, enunciado = ? WHERE id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(updatePregunta)) {
+				stmt.setString(1, curso);
+				stmt.setString(2, grupo);
+				stmt.setString(3, modulo);
+				stmt.setString(4, ra);
+				stmt.setString(5, tema);
+				stmt.setString(6, enunciado);
+				stmt.setInt(7, id);
+				if (stmt.executeUpdate() == 0) {
+					conn.rollback();
+					return false;
+				}
+			}
+
+			// Update test question table
+			String updateTest = "UPDATE pregunta_test SET opcion1 = ?, opcion2 = ?, opcion3 = ?, opcion4 = ?, correcta = ? WHERE pregunta_id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(updateTest)) {
+				stmt.setString(1, opciones.get(0));
+				stmt.setString(2, opciones.get(1));
+				stmt.setString(3, opciones.get(2));
+				stmt.setString(4, opciones.get(3));
+				stmt.setInt(5, correcta);
+				stmt.setInt(6, id);
+				if (stmt.executeUpdate() == 0) {
+					conn.rollback();
+					return false;
+				}
+			}
+
+			// Update keywords
+			updateKeywords(conn, id, palabrasClave);
+
+			conn.commit();
+			return true;
+		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static boolean updateDevelopmentQuestion(int id, String curso, String grupo, String modulo, String ra,
+			String tema,
+			String enunciado, String respuestaModelo, List<String> palabrasClave) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(db_url, db_user, db_pwd);
+			conn.setAutoCommit(false);
+
+			// Update main question table
+			String updatePregunta = "UPDATE pregunta SET curso = ?, grupo = ?, modulo = ?, ra = ?, tema = ?, enunciado = ? WHERE id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(updatePregunta)) {
+				stmt.setString(1, curso);
+				stmt.setString(2, grupo);
+				stmt.setString(3, modulo);
+				stmt.setString(4, ra);
+				stmt.setString(5, tema);
+				stmt.setString(6, enunciado);
+				stmt.setInt(7, id);
+				if (stmt.executeUpdate() == 0) {
+					conn.rollback();
+					return false;
+				}
+			}
+
+			// Update development question table
+			String updateDev = "UPDATE pregunta_desarrollo SET respuesta_modelo = ? WHERE pregunta_id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(updateDev)) {
+				stmt.setString(1, respuestaModelo);
+				stmt.setInt(2, id);
+				if (stmt.executeUpdate() == 0) {
+					conn.rollback();
+					return false;
+				}
+			}
+
+			// Update keywords
+			updateKeywords(conn, id, palabrasClave);
+
+			conn.commit();
+			return true;
+		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private static void updateKeywords(Connection conn, int preguntaId, List<String> palabrasClave)
+			throws SQLException {
+		// Delete existing keywords
+		String deleteKeywords = "DELETE FROM palabra_clave WHERE pregunta_id = ?";
+		try (PreparedStatement stmt = conn.prepareStatement(deleteKeywords)) {
+			stmt.setInt(1, preguntaId);
+			stmt.executeUpdate();
+		}
+
+		// Insert new keywords
+		if (palabrasClave != null && !palabrasClave.isEmpty()) {
+			String insertKeyword = "INSERT INTO palabra_clave (pregunta_id, palabra) VALUES (?, ?)";
+			try (PreparedStatement stmt = conn.prepareStatement(insertKeyword)) {
+				for (String keyword : palabrasClave) {
+					if (keyword != null && !keyword.trim().isEmpty()) {
+						stmt.setInt(1, preguntaId);
+						stmt.setString(2, keyword.trim());
+						stmt.executeUpdate();
+					}
+				}
+			}
+		}
+	}
+
+	public static List<Pregunta> getAllQuestions() {
+		List<Pregunta> allQuestions = new ArrayList<>();
+		// Get test questions
+		allQuestions.addAll(searchQuestions(new HashMap<>(), true));
+		// Get development questions
+		allQuestions.addAll(searchQuestions(new HashMap<>(), false));
+		return allQuestions;
 	}
 
 	public static List<Pregunta> searchQuestions(HashMap<String, String> filtros, boolean isTest) {

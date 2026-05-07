@@ -1,6 +1,5 @@
 package View;
 
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import CRUD.ExamQuerys;
 import CRUD.QuestionQuerys;
 import Model.Pregunta;
 import Model.PreguntaDesarrollo;
@@ -154,7 +152,7 @@ public class SearchQuest extends JFrame {
 
 		if (results.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "No se encontraron preguntas con esos filtros.", "Sin resultados",
-				JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
@@ -185,6 +183,19 @@ public class SearchQuest extends JFrame {
 			};
 			resultsTable = new JTable(tableModel);
 			resultsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			resultsTable.setFillsViewportHeight(true); // Asegura que la tabla llene el viewport
+			resultsTable.getTableHeader().setReorderingAllowed(false); // Evita reordenar columnas
+
+			// Configurar anchos de columna
+			resultsTable.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
+			resultsTable.getColumnModel().getColumn(1).setPreferredWidth(100); // Autor
+			resultsTable.getColumnModel().getColumn(2).setPreferredWidth(80); // Curso
+			resultsTable.getColumnModel().getColumn(3).setPreferredWidth(80); // Grupo
+			resultsTable.getColumnModel().getColumn(4).setPreferredWidth(80); // Módulo
+			resultsTable.getColumnModel().getColumn(5).setPreferredWidth(50); // RA
+			resultsTable.getColumnModel().getColumn(6).setPreferredWidth(100); // Tema
+			resultsTable.getColumnModel().getColumn(7).setPreferredWidth(100); // Fecha
+			resultsTable.getColumnModel().getColumn(8).setPreferredWidth(80); // Tipo
 			resultsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -214,7 +225,7 @@ public class SearchQuest extends JFrame {
 			}
 
 			JScrollPane scrollPane = new JScrollPane(resultsTable);
-			panel.add(scrollPane, UiUtils.gbc(0, 0, 1));
+			panel.add(scrollPane, UiUtils.gbcBoth(0, 0, 1));
 
 			JPanel actionPanel = UiUtils.createCardPanel();
 			JButton generarExamen = new JButton("Generar examen");
@@ -270,7 +281,7 @@ public class SearchQuest extends JFrame {
 
 		private void generateExamFromList() {
 			String input = JOptionPane.showInputDialog(this, "Número de preguntas para el examen:",
-				"Generar examen", JOptionPane.PLAIN_MESSAGE);
+					"Generar examen", JOptionPane.PLAIN_MESSAGE);
 			if (input == null || input.trim().isEmpty()) {
 				return;
 			}
@@ -280,27 +291,27 @@ public class SearchQuest extends JFrame {
 				count = Integer.parseInt(input.trim());
 			} catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(this, "Ingrese un número válido.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			if (count < 1) {
 				JOptionPane.showMessageDialog(this, "El número debe ser mayor que 0.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			int available = currentResults.size();
 			if (available == 0) {
 				JOptionPane.showMessageDialog(this, "No hay preguntas en el listado.", "Sin resultados",
-					JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
 
 			if (count > available) {
 				int option = JOptionPane.showConfirmDialog(this,
-					"Solo hay " + available + " preguntas en el listado. ¿Generar con esa cantidad?",
-					"Cantidad ajustada", JOptionPane.YES_NO_OPTION);
+						"Solo hay " + available + " preguntas en el listado. ¿Generar con esa cantidad?",
+						"Cantidad ajustada", JOptionPane.YES_NO_OPTION);
 				if (option != JOptionPane.YES_OPTION) {
 					return;
 				}
@@ -316,7 +327,7 @@ public class SearchQuest extends JFrame {
 				Pregunta p = examQuestions.get(i);
 				summary.append(i + 1).append(". ");
 				summary.append("Curso: ").append(p.getCurso()).append(" | RA: ").append(p.getRa())
-					.append(" | Tema: ").append(p.getTema()).append("\n");
+						.append(" | Tema: ").append(p.getTema()).append("\n");
 				summary.append(p.getEnunciado()).append("\n");
 				if (p instanceof PreguntaTest) {
 					PreguntaTest pt = (PreguntaTest) p;
@@ -336,7 +347,7 @@ public class SearchQuest extends JFrame {
 			preview.setEditable(false);
 			JScrollPane scrollPane = new JScrollPane(preview);
 			JOptionPane.showMessageDialog(this, scrollPane, "Examen generado desde el banco",
-				JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
