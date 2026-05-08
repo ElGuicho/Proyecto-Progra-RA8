@@ -18,8 +18,10 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+// class for interface strucutre and styling
 public class UiUtils {
 
+	// sets app style when the class is called
 	static {
 		setApplicationStyle();
 	}
@@ -37,6 +39,7 @@ public class UiUtils {
 		}
 	}
 
+	// sets up the main frame
 	public static void setupFrame(JFrame frame, String title, int width, int height) {
 		frame.setTitle(title);
 		frame.setSize(width, height);
@@ -45,6 +48,7 @@ public class UiUtils {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+	// enables the modification of the structure for the app panels
 	public static GridBagConstraints gbc(int x, int y, int width) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = x;
@@ -57,6 +61,7 @@ public class UiUtils {
 		return constraints;
 	}
 
+	// enables the modification of the structure for the app panels with both horizontal and vertical filling
 	public static GridBagConstraints gbcBoth(int x, int y, int width) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = x;
@@ -70,15 +75,7 @@ public class UiUtils {
 		return constraints;
 	}
 
-	public static JPanel createPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new java.awt.GridBagLayout());
-		panel.setBorder(new EmptyBorder(14, 14, 14, 14));
-		panel.setBackground(Color.WHITE);
-		panel.setOpaque(true);
-		return panel;
-	}
-
+	// creates the outer panel
 	public static JPanel createAppPanel() {
 		JPanel panel = new JPanel(new java.awt.BorderLayout());
 		panel.setBackground(new Color(240, 244, 250));
@@ -86,6 +83,7 @@ public class UiUtils {
 		return panel;
 	}
 
+	// creates the inner panel with card layout
 	public static JPanel createCardPanel() {
 		JPanel panel = new JPanel(new java.awt.GridBagLayout());
 		panel.setBackground(Color.WHITE);
@@ -96,6 +94,7 @@ public class UiUtils {
 		return panel;
 	}
 
+	// applies styling to the buttons
 	public static void styleButton(JButton button) {
 		button.setOpaque(true);
 		button.setBackground(new Color(38, 110, 218));
@@ -107,6 +106,7 @@ public class UiUtils {
 		button.setPreferredSize(new Dimension(280, 42));
 	}
 
+	// applies styling to the text areas
 	public static void styleTextArea(JTextArea area) {
 		area.setLineWrap(true);
 		area.setWrapStyleWord(true);
@@ -115,6 +115,7 @@ public class UiUtils {
 		area.setBackground(new Color(250, 252, 255));
 	}
 
+	// applies styling to the radio buttons
 	public static void styleRadioButton(JRadioButton radioButton) {
 		radioButton.setBackground(new Color(240, 244, 250));
 		radioButton.setFont(radioButton.getFont().deriveFont(Font.PLAIN, 13f));
@@ -128,6 +129,7 @@ public class UiUtils {
 		JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
+	// creates the title labels
 	public static JLabel createTitle(String text) {
 		var label = new JLabel(text, JLabel.CENTER);
 		label.setFont(label.getFont().deriveFont(18f).deriveFont(java.awt.Font.BOLD));

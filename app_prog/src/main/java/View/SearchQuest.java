@@ -2,8 +2,6 @@ package View;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -28,6 +25,7 @@ import Model.Pregunta;
 import Model.PreguntaDesarrollo;
 import Model.PreguntaTest;
 
+// Window for searching questions
 public class SearchQuest extends JFrame {
 
 	private JTextField idField = new JTextField(14);
@@ -159,6 +157,7 @@ public class SearchQuest extends JFrame {
 		new ResultsWindow(results, filters, isTest);
 	}
 
+	// inner class that displays the search results
 	private class ResultsWindow extends JFrame {
 		private JTable resultsTable;
 		private DefaultTableModel tableModel;
@@ -186,7 +185,7 @@ public class SearchQuest extends JFrame {
 			resultsTable.setFillsViewportHeight(true); // Asegura que la tabla llene el viewport
 			resultsTable.getTableHeader().setReorderingAllowed(false); // Evita reordenar columnas
 
-			// Configurar anchos de columna
+			// Configure column widths
 			resultsTable.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
 			resultsTable.getColumnModel().getColumn(1).setPreferredWidth(100); // Autor
 			resultsTable.getColumnModel().getColumn(2).setPreferredWidth(80); // Curso
@@ -228,14 +227,14 @@ public class SearchQuest extends JFrame {
 			panel.add(scrollPane, UiUtils.gbcBoth(0, 0, 1));
 
 			JPanel actionPanel = UiUtils.createCardPanel();
-			JButton generarExamen = new JButton("Generar examen");
-			UiUtils.styleButton(generarExamen);
-			actionPanel.add(generarExamen, UiUtils.gbc(0, 0, 1));
+			JButton cerrar = new JButton("Cerrar");
+			UiUtils.styleButton(cerrar);
+			actionPanel.add(cerrar, UiUtils.gbc(0, 0, 1));
 
-			generarExamen.addActionListener(new ActionListener() {
+			cerrar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					generateExamFromList();
+					dispose();
 				}
 			});
 
@@ -277,77 +276,6 @@ public class SearchQuest extends JFrame {
 
 			javax.swing.JOptionPane.showMessageDialog(this, details.toString(), "Detalles de la Pregunta",
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
-		}
-
-		private void generateExamFromList() {
-			String input = JOptionPane.showInputDialog(this, "Número de preguntas para el examen:",
-					"Generar examen", JOptionPane.PLAIN_MESSAGE);
-			if (input == null || input.trim().isEmpty()) {
-				return;
-			}
-
-			int count;
-			try {
-				count = Integer.parseInt(input.trim());
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "Ingrese un número válido.", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-
-			if (count < 1) {
-				JOptionPane.showMessageDialog(this, "El número debe ser mayor que 0.", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-
-			int available = currentResults.size();
-			if (available == 0) {
-				JOptionPane.showMessageDialog(this, "No hay preguntas en el listado.", "Sin resultados",
-						JOptionPane.INFORMATION_MESSAGE);
-				return;
-			}
-
-			if (count > available) {
-				int option = JOptionPane.showConfirmDialog(this,
-						"Solo hay " + available + " preguntas en el listado. ¿Generar con esa cantidad?",
-						"Cantidad ajustada", JOptionPane.YES_NO_OPTION);
-				if (option != JOptionPane.YES_OPTION) {
-					return;
-				}
-				count = available;
-			}
-
-			List<Pregunta> examQuestions = new ArrayList<>(currentResults);
-			Collections.shuffle(examQuestions);
-			examQuestions = examQuestions.subList(0, count);
-
-			StringBuilder summary = new StringBuilder();
-			for (int i = 0; i < examQuestions.size(); i++) {
-				Pregunta p = examQuestions.get(i);
-				summary.append(i + 1).append(". ");
-				summary.append("Curso: ").append(p.getCurso()).append(" | RA: ").append(p.getRa())
-						.append(" | Tema: ").append(p.getTema()).append("\n");
-				summary.append(p.getEnunciado()).append("\n");
-				if (p instanceof PreguntaTest) {
-					PreguntaTest pt = (PreguntaTest) p;
-					summary.append("  A: ").append(pt.getOpciones().get(0)).append("\n");
-					summary.append("  B: ").append(pt.getOpciones().get(1)).append("\n");
-					summary.append("  C: ").append(pt.getOpciones().get(2)).append("\n");
-					summary.append("  D: ").append(pt.getOpciones().get(3)).append("\n");
-					summary.append("  Correcta: ").append(pt.getCorrecta()).append("\n");
-				} else {
-					PreguntaDesarrollo pd = (PreguntaDesarrollo) p;
-					summary.append("  Respuesta modelo: ").append(pd.getRespuestaModelo()).append("\n");
-				}
-				summary.append("---------------------------------------------------\n");
-			}
-
-			JTextArea preview = new JTextArea(summary.toString(), 24, 60);
-			preview.setEditable(false);
-			JScrollPane scrollPane = new JScrollPane(preview);
-			JOptionPane.showMessageDialog(this, scrollPane, "Examen generado desde el banco",
-					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }

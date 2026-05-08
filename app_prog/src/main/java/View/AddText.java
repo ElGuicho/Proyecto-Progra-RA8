@@ -16,6 +16,7 @@ import CRUD.QuestionQuerys;
 import CRUD.UserQuerys;
 import Model.PreguntaDesarrollo;
 
+// Window for adding new text questions
 public class AddText extends JFrame {
 
 	private JTextField enunciadoField = new JTextField(24);
@@ -34,7 +35,7 @@ public class AddText extends JFrame {
 		panel.add(enunciadoField, UiUtils.gbc(0, 2, 2));
 
 		panel.add(new JLabel("Respuesta modelo:"), UiUtils.gbc(0, 3, 1));
-		panel.add(new JScrollPane(respuestaArea), UiUtils.gbc(0, 4, 2));
+		panel.add(new JScrollPane(respuestaArea), UiUtils.gbcBoth(0, 4, 2));
 
 		panel.add(guardar, UiUtils.gbc(0, 5, 1));
 		panel.add(volver, UiUtils.gbc(1, 5, 1));

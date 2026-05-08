@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import CRUD.UserQuerys;
 
+// Main menu
 public class ChoiceWin extends JFrame {
 
     private JButton crear = new JButton("Crear pregunta");
@@ -37,7 +38,7 @@ public class ChoiceWin extends JFrame {
         cardPanel.setBackground(Color.WHITE);
         cardPanel.setBorder(new EmptyBorder(20, 24, 24, 24));
 
-        JLabel title = new JLabel("Gestión de preguntas", JLabel.CENTER);
+        JLabel title = new JLabel("Gestion de preguntas", JLabel.CENTER);
         title.setFont(title.getFont().deriveFont(Font.BOLD, 22f));
         title.setForeground(new Color(34, 64, 128));
 
@@ -127,6 +128,7 @@ public class ChoiceWin extends JFrame {
         });
     }
 
+	// Applies styling to the buttons
     private void setupPrimaryButton(JButton button) {
         UiUtils.styleButton(button);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

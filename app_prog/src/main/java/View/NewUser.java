@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import CRUD.UserQuerys;
 
+//manages new users
 public class NewUser extends JFrame {
 
     private JTextField userField = new JTextField(18);
@@ -67,6 +68,7 @@ public class NewUser extends JFrame {
         });
     }
 
+	// creates a new user account after validating the input
     private void createAccount() {
         String username = userField.getText().trim();
         String password = new String(passwordField.getPassword());
@@ -78,7 +80,7 @@ public class NewUser extends JFrame {
         }
 
         if (password.isEmpty()) {
-            UiUtils.showError(this, "Ingrese una contrase�a.");
+            UiUtils.showError(this, "Ingrese una contrasena.");
             passwordField.requestFocusInWindow();
             return;
         }
@@ -101,6 +103,7 @@ public class NewUser extends JFrame {
         new UserPwd();
     }
 
+	// Validates the password following the criteria
     private boolean verifyPwd(String passwd) {
         boolean hasSpecial = passwd.matches(".*[!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\^_`{|}~].*");
         boolean hasLower = passwd.matches(".*[a-z].*");
@@ -108,23 +111,23 @@ public class NewUser extends JFrame {
         boolean hasDigit = passwd.matches(".*[0-9].*");
 
         if (passwd.length() < 12) {
-            UiUtils.showError(this, "La contrase�a debe tener 12 o m�s caracteres.");
+            UiUtils.showError(this, "La contrasena debe tener 12 o mas caracteres.");
             return false;
         }
         if (!hasLower) {
-            UiUtils.showError(this, "La contrase�a debe contener min�sculas.");
+            UiUtils.showError(this, "La contrasena debe contener minusculas.");
             return false;
         }
         if (!hasUpper) {
-            UiUtils.showError(this, "La contrase�a debe contener may�sculas.");
+            UiUtils.showError(this, "La contrasena debe contener mayusculas.");
             return false;
         }
         if (!hasDigit) {
-            UiUtils.showError(this, "La contrase�a debe contener n�meros.");
+            UiUtils.showError(this, "La contrasena debe contener numeros.");
             return false;
         }
         if (!hasSpecial) {
-            UiUtils.showError(this, "La contrase�a debe contener caracteres especiales.");
+            UiUtils.showError(this, "La contrasena debe contener caracteres especiales.");
             return false;
         }
         return true;

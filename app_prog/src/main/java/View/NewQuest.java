@@ -16,6 +16,7 @@ import CRUD.UserQuerys;
 import Model.PreguntaDesarrollo;
 import Model.PreguntaTest;
 
+// Creates filters for Pregunta table
 public class NewQuest extends JFrame {
 
     private JRadioButton testOption = new JRadioButton("Pregunta tipo TEST");

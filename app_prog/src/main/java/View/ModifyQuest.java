@@ -27,6 +27,7 @@ import Model.Pregunta;
 import Model.PreguntaDesarrollo;
 import Model.PreguntaTest;
 
+// Window for modifying existing questions
 public class ModifyQuest extends JFrame {
 
 	private JTextField idField = new JTextField(14);
@@ -180,6 +181,7 @@ public class ModifyQuest extends JFrame {
 		new ModifyResultsWindow(allQuestions, new HashMap<>(), null);
 	}
 
+	// Inner class for displaying search results
 	private class ModifyResultsWindow extends JFrame {
 		private JTable resultsTable;
 		private DefaultTableModel tableModel;
@@ -207,7 +209,7 @@ public class ModifyQuest extends JFrame {
 			resultsTable.setFillsViewportHeight(true);
 			resultsTable.getTableHeader().setReorderingAllowed(false);
 
-			// Configurar anchos de columna
+			// Configure column widths
 			resultsTable.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
 			resultsTable.getColumnModel().getColumn(1).setPreferredWidth(100); // Autor
 			resultsTable.getColumnModel().getColumn(2).setPreferredWidth(80); // Curso
@@ -278,6 +280,7 @@ public class ModifyQuest extends JFrame {
 		}
 	}
 
+	// Inner class for the dialog to modify a specific question
 	private class ModifyQuestionDialog extends JFrame {
 		private Pregunta question;
 		private ModifyResultsWindow parentWindow;
@@ -296,12 +299,12 @@ public class ModifyQuest extends JFrame {
 			JPanel panel = UiUtils.createCardPanel();
 			int row = 0;
 
-			// Campos no editables
+			// Non-editable fields
 			panel.add(new JLabel("ID: " + question.getId()), UiUtils.gbc(0, row++, 2));
 			panel.add(new JLabel("Autor: " + question.getAutor()), UiUtils.gbc(0, row++, 2));
 			panel.add(new JLabel("Fecha: " + question.getFechaCreacion()), UiUtils.gbc(0, row++, 2));
 
-			// Campos editables
+			// editable fields
 			cursoField = new JTextField(question.getCurso(), 20);
 			grupoField = new JTextField(question.getGrupo(), 20);
 			moduloField = new JTextField(question.getModulo(), 20);
@@ -463,7 +466,6 @@ public class ModifyQuest extends JFrame {
 							UserQuerys.getUserName(UserQuerys.getUserId()) + " modificó la pregunta con ID " + question.getId());
 					parentWindow.dispose();
 					dispose();
-					// Refresh the main window
 				} else {
 					JOptionPane.showMessageDialog(this, "Error al modificar la pregunta.", "Error",
 							JOptionPane.ERROR_MESSAGE);

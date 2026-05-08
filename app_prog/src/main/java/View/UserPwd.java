@@ -14,8 +14,8 @@ import javax.swing.JTextField;
 
 import CRUD.UserQuerys;
 
+//manages user login
 public class UserPwd extends JFrame {
-
 	private JTextField userField = new JTextField(18);
 	private JPasswordField passwordField = new JPasswordField(18);
 	private JButton confirm = new JButton("Iniciar sesion");
@@ -84,6 +84,7 @@ public class UserPwd extends JFrame {
 		new UserPwd();
 	}
 
+	// Validates the user input and attempts to log in
 	private void login() {
 		String username = userField.getText().trim();
 		String password = new String(passwordField.getPassword());

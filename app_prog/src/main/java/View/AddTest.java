@@ -18,6 +18,7 @@ import CRUD.QuestionQuerys;
 import CRUD.UserQuerys;
 import Model.PreguntaTest;
 
+// Window for adding new test questions
 public class AddTest extends JFrame {
 
 	private JTextField enunciadoField = new JTextField(24);

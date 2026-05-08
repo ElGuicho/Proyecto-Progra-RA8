@@ -25,6 +25,7 @@ import CRUD.UserQuerys;
 import Model.Pregunta;
 import Model.PreguntaTest;
 
+// Window for deleting questions
 public class DeleteQuest extends JFrame {
 
 	private JTextField idField = new JTextField(14);
@@ -178,6 +179,8 @@ public class DeleteQuest extends JFrame {
 		new DeleteResultsWindow(allQuestions, new HashMap<>(), null);
 	}
 
+
+	// Inner class for displaying search results and allowing deletion
 	private class DeleteResultsWindow extends JFrame {
 		private JTable resultsTable;
 		private DefaultTableModel tableModel;
@@ -205,7 +208,7 @@ public class DeleteQuest extends JFrame {
 			resultsTable.setFillsViewportHeight(true);
 			resultsTable.getTableHeader().setReorderingAllowed(false);
 
-			// Configurar anchos de columna
+			// Configure column widths
 			resultsTable.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
 			resultsTable.getColumnModel().getColumn(1).setPreferredWidth(100); // Autor
 			resultsTable.getColumnModel().getColumn(2).setPreferredWidth(80); // Curso
@@ -293,7 +296,6 @@ public class DeleteQuest extends JFrame {
 				UserQuerys.logOperation(UserQuerys.getUserId(), "Eliminar pregunta",
 						UserQuerys.getUserName(UserQuerys.getUserId()) + " eliminó la pregunta con ID " + id);
 				dispose();
-				// Refresh the main window
 			} else {
 				JOptionPane.showMessageDialog(this, "Error al eliminar la pregunta.", "Error",
 						JOptionPane.ERROR_MESSAGE);
